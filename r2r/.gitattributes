@@ -1,0 +1,7 @@
+# Hide secret env files from diffs and exports
+.env -diff export-ignore
+.env.local -diff export-ignore
+.env.* -diff export-ignore
+
+# Keep the template trackable and reviewable
+.env.example text eol=lf diff
