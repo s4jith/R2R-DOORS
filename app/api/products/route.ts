@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/mongodb";
 import Product from "@/lib/db/models/product";
 import { getCached, setCached, deleteCached } from "@/lib/db/redis";
+import { products as mockProducts } from "@/lib/mock-data";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function serialize(doc: Record<string, any>) {
@@ -21,6 +22,12 @@ function normalizeCached(doc: Record<string, any>) {
     ...doc,
     pricePerSqft: Number.isFinite(normalizedPrice) ? normalizedPrice : 0,
   };
+}
+
+function getMockProducts(category?: string) {
+  return mockProducts.filter((product) =>
+    category ? product.category === category : true
+  );
 }
 
 export async function GET(req: NextRequest) {
@@ -46,11 +53,10 @@ export async function GET(req: NextRequest) {
     await setCached(cacheKey, result, 300);
     return NextResponse.json(result);
   } catch (err) {
-    console.error("[GET /api/products]", err);
-    return NextResponse.json(
-      { error: "Failed to fetch products" },
-      { status: 500 }
-    );
+    console.error("[GET /api/products] Falling back to mock data:", err);
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category") ?? undefined;
+    return NextResponse.json(getMockProducts(category));
   }
 }
 

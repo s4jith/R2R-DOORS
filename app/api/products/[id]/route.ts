@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/mongodb";
 import Product from "@/lib/db/models/product";
 import { deleteCached } from "@/lib/db/redis";
+import { products as mockProducts } from "@/lib/mock-data";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function serialize(doc: Record<string, any>) {
@@ -24,11 +25,13 @@ export async function GET(
     const doc = await Product.findById(id).lean();
     if (!doc) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(serialize(doc));
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to fetch product" },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error("[GET /api/products/[id]] Falling back to mock data:", err);
+    const product = mockProducts.find((item) => item.id === id);
+    if (!product) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    return NextResponse.json(product);
   }
 }
 

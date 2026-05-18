@@ -3,6 +3,7 @@ import { getCached, setCached } from "./redis";
 import Product from "./models/product";
 import Order from "./models/order";
 import type { Product as ProductType, Order as OrderType } from "@/lib/types";
+import { products as mockProducts } from "@/lib/mock-data";
 
 // ── Serializers ──────────────────────────────────────────────────────────────
 
@@ -40,6 +41,12 @@ function normalizeCachedProduct(doc: Record<string, any>): ProductType {
   };
 }
 
+function getMockProducts(category?: string): ProductType[] {
+  return mockProducts.filter((product) =>
+    category ? product.category === category : true
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function serializeOrder(doc: Record<string, any>): OrderType {
   return {
@@ -67,15 +74,20 @@ export async function getProducts(category?: string): Promise<ProductType[]> {
   const cached = await getCached<ProductType[]>(cacheKey);
   if (cached) return cached.map((p) => normalizeCachedProduct(p));
 
-  await connectDB();
-  const query = category
-    ? { category: category as "door" | "window" }
-    : {};
-  const docs = await Product.find(query).sort({ createdAt: -1 }).lean();
-  const result = docs.map(serializeProduct);
+  try {
+    await connectDB();
+    const query = category
+      ? { category: category as "door" | "window" }
+      : {};
+    const docs = await Product.find(query).sort({ createdAt: -1 }).lean();
+    const result = docs.map(serializeProduct);
 
-  await setCached(cacheKey, result, 300);
-  return result;
+    await setCached(cacheKey, result, 300);
+    return result;
+  } catch (err) {
+    console.error("[getProducts] Falling back to mock data:", err);
+    return getMockProducts(category);
+  }
 }
 
 export async function getProductById(id: string): Promise<ProductType | null> {
@@ -91,8 +103,9 @@ export async function getProductById(id: string): Promise<ProductType | null> {
     const result = serializeProduct(doc);
     await setCached(cacheKey, result, 600);
     return result;
-  } catch {
-    return null;
+  } catch (err) {
+    console.error("[getProductById] Falling back to mock data:", err);
+    return mockProducts.find((product) => product.id === id) ?? null;
   }
 }
 
