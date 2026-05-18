@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
-  DoorOpen,
   LayoutDashboard,
   Package,
   ClipboardList,
@@ -14,6 +13,7 @@ import {
   Bell,
   ChevronRight,
 } from "lucide-react";
+import R2RLogo from "@/components/r2r-logo";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -42,11 +42,9 @@ function Sidebar({
       {/* Logo */}
       <div className="px-6 py-5 flex items-center justify-between border-b border-white/10">
         <Link href="/admin" className="flex items-center gap-2.5 group" onClick={onClose}>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-            <DoorOpen className="w-4 h-4 text-white" />
-          </div>
-          <span className="font-bold tracking-tight text-sm">
-            R2R <span className="text-blue-300">DOORS</span>
+          <R2RLogo animated className="h-8 w-20" />
+          <span className="font-bold tracking-tight text-sm whitespace-nowrap">
+            R2R Doors & Windows
           </span>
         </Link>
         {mobile && (

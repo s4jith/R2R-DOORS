@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DoorOpen, Eye, EyeOff, Lock, User } from "lucide-react";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
+import R2RLogo from "@/components/r2r-logo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -34,11 +35,9 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg mb-4">
-            <DoorOpen className="w-7 h-7 text-white" />
-          </div>
-          <h1 className="text-2xl font-extrabold text-foreground">
-            R2R <span className="text-primary">DOORS</span>
+          <R2RLogo animated className="h-14 w-32 mb-4" />
+          <h1 className="text-2xl font-extrabold text-foreground whitespace-nowrap">
+            R2R Doors & Windows
           </h1>
           <p className="text-sm text-muted-foreground mt-1">Admin Portal</p>
         </div>

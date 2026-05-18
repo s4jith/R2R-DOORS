@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "R2R Doors - Precision Doors. Perfect Fit.",
+  title: "R2R Doors & Windows - Precision Doors. Perfect Fit.",
   description:
-    "Custom-built doors & windows crafted with premium materials, modern pricing, and fast delivery across India.",
+    "Custom-built doors & windows crafted with premium materials, modern pricing, and fast delivery across India. R2R Doors & Windows is your trusted manufacturer for quality and endurance.",
 };
 
 export default function RootLayout({

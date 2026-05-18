@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X, DoorOpen } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import R2RLogo from "./r2r-logo";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -34,12 +35,10 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-            <DoorOpen className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-foreground">
-            R2R <span className="text-primary">DOORS</span>
+        <Link href="/" className="flex items-center gap-2.5 group" style={{ minWidth: 140 }}>
+          <R2RLogo animated className="h-12 w-32" />
+          <span className="text-lg font-bold tracking-tight text-foreground whitespace-nowrap">
+            R2R Doors & Windows
           </span>
         </Link>
 

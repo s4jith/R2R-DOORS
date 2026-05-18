@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DoorOpen, Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 
 const footerLinks = {
   Company: [
@@ -23,12 +23,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-                <DoorOpen className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                R2R <span className="text-blue-300">DOORS</span>
+            <div className="mb-4">
+              <span className="text-lg font-bold tracking-tight whitespace-nowrap">
+                R2R Doors & Windows
               </span>
             </div>
             <p className="text-sm text-blue-200 leading-relaxed max-w-sm mb-6">
@@ -84,7 +81,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-blue-300">
-            &copy; {new Date().getFullYear()} R2R Doors. All rights reserved.
+            &copy; {new Date().getFullYear()} R2R Doors &amp; Windows. All rights reserved.
           </p>
           <p className="text-xs text-blue-400">
             Precision crafted in India.
