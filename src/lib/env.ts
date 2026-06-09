@@ -17,7 +17,7 @@ const raw = {
   R2_PUBLIC_URL: process.env.R2_PUBLIC_URL,
   AUTH_SECRET: process.env.AUTH_SECRET,
   ADMIN_USERNAME: process.env.ADMIN_USERNAME,
-  ADMIN_PASSWORD_HASH: process.env.ADMIN_PASSWORD_HASH,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   SESSION_COOKIE_MAX_AGE: process.env.SESSION_COOKIE_MAX_AGE,
 } as const;
 
@@ -49,7 +49,7 @@ const authSchema = z.object({
     .string()
     .min(32, "AUTH_SECRET must be at least 32 characters"),
   ADMIN_USERNAME: z.string().min(1, "ADMIN_USERNAME is required"),
-  ADMIN_PASSWORD_HASH: z.string().min(1, "ADMIN_PASSWORD_HASH is required"),
+  ADMIN_PASSWORD: z.string().min(1, "ADMIN_PASSWORD is required"),
   SESSION_COOKIE_MAX_AGE: z.coerce
     .number()
     .int()
@@ -70,10 +70,5 @@ export function getR2Env() {
 }
 
 export function getAuthEnv() {
-  authEnv ??= parse(authSchema, "authentication");
-  // Decode base64-encoded password hash (needed because $ in bcrypt hashes breaks dotenv parsing)
-  return {
-    ...authEnv,
-    ADMIN_PASSWORD_HASH: Buffer.from(authEnv.ADMIN_PASSWORD_HASH, 'base64').toString('utf-8'),
-  };
+  return (authEnv ??= parse(authSchema, "authentication"));
 }

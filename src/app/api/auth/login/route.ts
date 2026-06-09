@@ -27,8 +27,8 @@ export async function POST(req: Request) {
     const env = getAuthEnv();
     const { username, password } = parsed.data;
 
-    // Always run the hash comparison to avoid leaking which field was wrong.
-    const passwordOk = await verifyPassword(password, env.ADMIN_PASSWORD_HASH);
+    // Always run the password comparison to avoid leaking which field was wrong.
+    const passwordOk = await verifyPassword(password, env.ADMIN_PASSWORD);
     const usernameOk = username === env.ADMIN_USERNAME;
 
     if (!usernameOk || !passwordOk) {
