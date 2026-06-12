@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -16,51 +15,57 @@ export default function ProductCard({ product, className }: ProductCardProps) {
   const safePrice = Number(product.pricePerSqft ?? 0);
 
   return (
-    <Link href={`/products/${product.id}`} className={cn("group block", className)}>
-      <div className="bg-white rounded-xl overflow-hidden ring-1 ring-border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <Link
+      href={`/products/${product.id}`}
+      className={cn(
+        "group block rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        className
+      )}
+    >
+      <article className="relative h-full overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg">
         {/* Image */}
-        <div className="relative h-52 bg-muted overflow-hidden">
+        <div className="relative h-52 overflow-hidden bg-muted">
           <Image
             src={product.image || PLACEHOLDER}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
             unoptimized
           />
-          <div className="absolute top-3 left-3 flex gap-2">
-            <Badge
-              variant="secondary"
-              className="capitalize text-xs bg-white/90 text-foreground shadow-sm backdrop-blur-sm"
-            >
+          {/* gradient scrim for badge legibility */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/25 to-transparent" />
+          <div className="absolute left-3 top-3 flex gap-2">
+            <span className="glass rounded-full px-2.5 py-1 text-xs font-semibold capitalize text-foreground shadow-sm ring-1 ring-white/40">
               {product.category}
-            </Badge>
+            </span>
             {!product.inStock && (
-              <Badge variant="outline" className="text-xs bg-white/90 backdrop-blur-sm">
+              <span className="rounded-full bg-destructive/90 px-2.5 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
                 Out of Stock
-              </Badge>
+              </span>
             )}
           </div>
         </div>
 
         {/* Content */}
         <div className="p-5">
-          <h3 className="font-semibold text-foreground text-base leading-snug group-hover:text-primary transition-colors">
+          <h3 className="text-base font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">
             {product.name}
           </h3>
-          <p className="text-xs text-muted-foreground mt-1 mb-3">{product.material}</p>
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xl font-bold text-primary">
+          <p className="mt-1 text-xs text-muted-foreground">{product.material}</p>
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex items-baseline gap-1">
+              <span className="text-xl font-bold tracking-tight text-foreground">
                 ₹{(Number.isFinite(safePrice) ? safePrice : 0).toLocaleString()}
               </span>
-              <span className="text-xs text-muted-foreground ml-1">/ sq.ft</span>
+              <span className="text-xs text-muted-foreground">/ sq.ft</span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary transition-colors">
-              <ArrowRight className="w-4 h-4 text-primary group-hover:text-white transition-colors" />
-            </div>
+            <span className="flex size-9 items-center justify-center rounded-full bg-accent text-primary transition-colors group-hover:bg-gradient-primary group-hover:text-primary-foreground">
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
           </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 }

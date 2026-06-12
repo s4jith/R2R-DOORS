@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Calculator } from "lucide-react";
 
 interface PriceCalculatorProps {
   pricePerSqft: number;
@@ -13,56 +14,68 @@ export default function PriceCalculator({ pricePerSqft }: PriceCalculatorProps) 
   const calcArea = Number(width) * Number(height);
   const calcPrice = calcArea > 0 ? calcArea * pricePerSqft : null;
 
+  const inputCls =
+    "w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-ring/40";
+
   return (
-    <div className="bg-white rounded-xl p-5 ring-1 ring-border shadow-sm">
-      <h3 className="font-semibold text-foreground mb-4 text-sm uppercase tracking-wide">
+    <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-foreground/[0.07]">
+      <h3 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-foreground">
+        <Calculator className="size-4 text-primary" />
         Price Calculator
       </h3>
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="mb-4 grid grid-cols-2 gap-3">
         <div>
-          <label className="text-xs text-muted-foreground mb-1 block">
+          <label
+            htmlFor="calc-width"
+            className="mb-1 block text-xs text-muted-foreground"
+          >
             Width (ft)
           </label>
           <input
+            id="calc-width"
             type="number"
             min="0"
             step="0.5"
             value={width}
             onChange={(e) => setWidth(e.target.value)}
             placeholder="e.g. 3"
-            className="w-full px-3 py-2.5 rounded-lg border border-border text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className={inputCls}
           />
         </div>
         <div>
-          <label className="text-xs text-muted-foreground mb-1 block">
+          <label
+            htmlFor="calc-height"
+            className="mb-1 block text-xs text-muted-foreground"
+          >
             Height (ft)
           </label>
           <input
+            id="calc-height"
             type="number"
             min="0"
             step="0.5"
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             placeholder="e.g. 7"
-            className="w-full px-3 py-2.5 rounded-lg border border-border text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className={inputCls}
           />
         </div>
       </div>
       {calcPrice !== null ? (
-        <div className="p-3 bg-primary/5 rounded-lg">
+        <div className="rounded-xl bg-accent p-4 ring-1 ring-primary/10">
           <p className="text-xs text-muted-foreground">
             {width} ft × {height} ft = {calcArea} sq.ft
           </p>
-          <p className="text-xl font-bold text-primary mt-0.5">
-            Estimated: ₹{calcPrice.toLocaleString()}
+          <p className="mt-0.5 text-2xl font-bold tracking-tight text-primary">
+            ₹{calcPrice.toLocaleString()}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            * Final price may vary based on finish and hardware.
+          <p className="mt-1 text-xs text-muted-foreground">
+            * Estimate only. Final price may vary with finish and hardware.
           </p>
         </div>
       ) : (
         <p className="text-xs text-muted-foreground">
-          Enter width and height to calculate estimated price.
+          Enter width and height to calculate an estimated price.
         </p>
       )}
     </div>

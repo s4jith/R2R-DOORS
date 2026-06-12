@@ -11,35 +11,64 @@ import {
   Star,
   ArrowRight,
   Phone,
+  Hammer,
+  PackageSearch,
 } from "lucide-react";
 import ProductCard from "@/components/product/product-card";
-import InteractiveDoor from "@/components/marketing/interactive-door";
+import { HeroStage } from "@/components/marketing/hero-stage";
+import { BentoTile } from "@/components/marketing/bento-tile";
+import { ClosingCta } from "@/components/marketing/closing-cta";
+import { Marquee } from "@/components/motion/marquee";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
+import { Counter } from "@/components/motion/counter";
 import { getProducts } from "@/lib/services/products";
 
+const leadFeature = {
+  icon: Ruler,
+  title: "Made to your exact spec",
+  description:
+    "Every door and window is manufactured to your precise dimensions — no standard sizes, no compromises, no on-site surprises. Send measurements; we cut to ±0.5mm.",
+};
+
 const features = [
-  {
-    icon: Ruler,
-    title: "Custom Sizing",
-    description:
-      "Every door and window is manufactured to your exact specifications — no standard sizes, no compromises.",
-  },
   {
     icon: Package,
     title: "Premium Materials",
     description:
-      "We source only Grade-A teak, galvanised steel, uPVC, and aluminium alloys tested for longevity.",
+      "Grade-A teak, galvanised steel, uPVC, and aluminium alloys, tested for longevity.",
   },
   {
     icon: Truck,
     title: "Fast Delivery",
     description:
-      "Production-to-delivery in 7–14 working days across India with insured freight handling.",
+      "Production-to-delivery in 7–14 working days across India with insured freight.",
   },
   {
     icon: BadgeCheck,
-    title: "Affordable Pricing",
+    title: "Honest Pricing",
     description:
-      "Direct factory pricing with no middlemen — premium quality at honest, transparent rates.",
+      "Direct factory pricing with no middlemen — premium quality at transparent rates.",
+  },
+];
+
+const process = [
+  {
+    icon: Ruler,
+    step: "01",
+    title: "Measure",
+    description: "Share your dimensions or book a free on-site measure.",
+  },
+  {
+    icon: Hammer,
+    step: "02",
+    title: "Craft",
+    description: "Built to spec and put through a 12-point quality inspection.",
+  },
+  {
+    icon: Wrench,
+    step: "03",
+    title: "Install",
+    description: "Certified teams fit, align, and seal — guaranteed for 10 years.",
   },
 ];
 
@@ -64,7 +93,21 @@ const whyChooseUs = [
   },
 ];
 
+const trustItems = [
+  "Grade-A Teak",
+  "Galvanised Steel",
+  "uPVC",
+  "Aluminium Alloy",
+  "ISO 9001:2015",
+  "12-Point Inspection",
+  "Insured Freight",
+];
 
+const heroStats: [string, string][] = [
+  ["500+", "Projects"],
+  ["15+", "Years"],
+  ["10yr", "Warranty"],
+];
 
 export default async function HomePage() {
   let featuredProducts: Awaited<ReturnType<typeof getProducts>> = [];
@@ -73,196 +116,326 @@ export default async function HomePage() {
   } catch {
     // DB unavailable — show empty state
   }
-  const topProducts = featuredProducts.slice(0, 6);
+  const topProducts = featuredProducts.slice(0, 8);
 
   return (
     <>
-      {/* ── Hero ─────────────────────────────────────── */}
-      <section className="bg-white min-h-[calc(100vh-4rem)] flex items-center">
-        <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left */}
-          <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6">
-              <BadgeCheck className="w-3.5 h-3.5" />
-              ISO 9001:2015 Certified Manufacturer
-            </div>
-            <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-foreground mb-6">
-              Precision Doors.
-              <br />
-              <span className="text-primary">Perfect Fit.</span>
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-10">
-              Custom-built doors &amp; windows engineered for endurance. Premium
-              materials, exact dimensions, and honest pricing — directly from our
-              factory floor to your site.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow-md hover:bg-primary/90 hover:shadow-lg transition-all"
-              >
-                Explore Products
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a
-                href="tel:+919876543210"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary/5 transition-all"
-              >
-                <Phone className="w-4 h-4" />
-                Contact Us
-              </a>
-            </div>
-            <div className="mt-10 flex items-center gap-8">
-              {[["500+", "Projects"], ["15+", "Years"], ["10yr", "Warranty"]].map(([value, label]) => (
-                <div key={label}>
-                  <p className="text-2xl font-bold text-primary">{value}</p>
-                  <p className="text-xs text-muted-foreground">{label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right — interactive 3-D door */}
-          <div className="flex justify-center lg:justify-end py-8">
-            <InteractiveDoor />
-          </div>
+      {/* ── Hero (cinematic dark stage) ───────────────── */}
+      <HeroStage>
+        <div className="animate-fade-up glass mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-white/85">
+          <span className="size-1.5 rounded-full bg-brand-400" />
+          ISO 9001:2015 Certified · Made to Spec
         </div>
+        <h1
+          className="animate-fade-up text-balance text-5xl font-extrabold leading-[1.05] tracking-tight text-white lg:text-7xl"
+          data-delay="1"
+        >
+          Precision doors.
+          <br />
+          <span className="text-shimmer text-shimmer-light">Perfect fit.</span>
+        </h1>
+        <p
+          className="animate-fade-up mt-6 max-w-prose text-lg leading-relaxed text-white/65"
+          data-delay="2"
+        >
+          Custom-built doors &amp; windows engineered for endurance. Premium
+          materials, exact dimensions, and honest pricing — straight from our
+          factory floor to your site.
+        </p>
+        <div className="animate-fade-up mt-9 flex flex-wrap gap-3" data-delay="3">
+          <Link
+            href="/products"
+            className="group inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-primary-lg transition-transform active:translate-y-px"
+          >
+            Explore Products
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <a
+            href="tel:+919876543210"
+            className="border-gradient inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold text-white transition-transform active:translate-y-px"
+          >
+            <Phone className="size-4 text-brand-300" />
+            Contact Us
+          </a>
+        </div>
+        <div
+          className="animate-fade-up glass mt-10 inline-flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border border-white/10 px-5 py-3"
+          data-delay="4"
+        >
+          {heroStats.map(([value, label], i) => (
+            <div key={label} className="flex items-center gap-6">
+              {i > 0 && <span className="h-8 w-px bg-white/15" />}
+              <div>
+                <Counter
+                  value={value}
+                  className="block text-2xl font-bold tracking-tight text-white"
+                />
+                <span className="text-xs text-white/55">{label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </HeroStage>
+
+      {/* ── Trust marquee ─────────────────────────────── */}
+      <section className="border-y border-border bg-background py-6">
+        <Marquee>
+          {trustItems.map((item) => (
+            <span
+              key={item}
+              className="mx-7 inline-flex items-center gap-3 text-sm font-medium uppercase tracking-widest text-muted-foreground"
+            >
+              <span className="size-1 rounded-full bg-primary/50" />
+              {item}
+            </span>
+          ))}
+        </Marquee>
       </section>
 
-      {/* ── Features ─────────────────────────────────── */}
-      <section className="bg-background py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-3">
-              Why Builders Choose R2R
+      {/* ── Features (bento) ──────────────────────────── */}
+      <section className="bg-background py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal className="mx-auto mb-14 max-w-2xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+              Why R2R
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Built different, from the first cut
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
+            <p className="mt-3 text-muted-foreground">
               Four pillars that set us apart in a competitive market.
             </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map(({ icon: Icon, title, description }) => (
+          </Reveal>
+
+          {/* Lead banner tile */}
+          <Reveal>
+            <div className="group relative mb-6 flex flex-col gap-6 overflow-hidden rounded-3xl border border-transparent bg-card p-8 ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-1 hover:shadow-lg sm:flex-row sm:items-center">
               <div
-                key={title}
-                className="bg-white rounded-xl p-6 ring-1 ring-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-              >
-                <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <Icon className="w-5 h-5 text-primary" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-2">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+                aria-hidden
+                className="spotlight pointer-events-none absolute -right-10 -top-10 size-56 opacity-50"
+              />
+              <div className="relative flex size-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-primary">
+                <leadFeature.icon className="size-7" />
               </div>
+              <div className="relative">
+                <h3 className="text-2xl font-bold tracking-tight">
+                  <span className="text-gradient">{leadFeature.title}</span>
+                </h3>
+                <p className="mt-2 max-w-2xl leading-relaxed text-muted-foreground">
+                  {leadFeature.description}
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Supporting tiles */}
+          <RevealGroup className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map(({ icon: Icon, title, description }) => (
+              <RevealItem key={title}>
+                <BentoTile
+                  icon={<Icon className="size-5" />}
+                  title={title}
+                  description={description}
+                  className="h-full"
+                />
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
-      {/* ── Product Preview ───────────────────────────── */}
-      <section className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
+      {/* ── Process strip ─────────────────────────────── */}
+      <section className="border-y border-border bg-secondary/60 py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal className="mx-auto mb-14 max-w-2xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+              How it works
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Three steps to a perfect fit
+            </h2>
+          </Reveal>
+          <RevealGroup className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {process.map(({ icon: Icon, step, title, description }) => (
+              <RevealItem key={step}>
+                <div className="relative h-full overflow-hidden rounded-3xl bg-card p-7 ring-1 ring-foreground/[0.07]">
+                  <span className="absolute right-5 top-4 text-5xl font-black text-primary/[0.07]">
+                    {step}
+                  </span>
+                  <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-accent text-primary ring-1 ring-primary/10">
+                    <Icon className="size-5" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {title}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {description}
+                  </p>
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      </section>
+
+      {/* ── Product rail ──────────────────────────────── */}
+      <section className="bg-background py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal className="mb-10 flex items-end justify-between gap-6">
             <div>
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+              <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary">
+                Catalogue
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Our Product Range
               </h2>
-              <p className="text-muted-foreground">
+              <p className="mt-2 text-muted-foreground">
                 Doors and windows for every style and budget.
               </p>
             </div>
             <Link
               href="/products"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary/80 sm:inline-flex"
             >
               View All Products
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="size-4" />
             </Link>
+          </Reveal>
+        </div>
+
+        {topProducts.length > 0 ? (
+          <div className="mask-fade-x overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="mx-auto flex max-w-7xl snap-x snap-mandatory gap-6 px-6">
+              {topProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="w-[280px] shrink-0 snap-start sm:w-[300px]"
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topProducts.length > 0 ? (
-              topProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              <div className="col-span-3 py-12 text-center text-muted-foreground">
-                <p className="font-medium">No products yet.</p>
-                <p className="text-sm mt-1">
-                  Seed the database at{" "}
-                  <code className="text-primary">/api/seed</code> to populate
-                  products.
-                </p>
+        ) : (
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="flex flex-col items-center rounded-3xl border border-dashed border-border bg-card py-16 text-center">
+              <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-accent text-primary">
+                <PackageSearch className="size-6" />
               </div>
-            )}
+              <p className="font-medium text-foreground">No products yet.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Seed the database at{" "}
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-primary">
+                  /api/seed
+                </code>{" "}
+                to populate products.
+              </p>
+            </div>
           </div>
-          <div className="mt-8 text-center sm:hidden">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-            >
-              View All Products
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+        )}
+      </section>
+
+      {/* ── Why Choose Us + Quote ─────────────────────── */}
+      <section className="border-t border-border bg-background py-20 sm:py-24">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:gap-16">
+          <Reveal direction="right">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+              Our Promise
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Engineered for Endurance
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted-foreground">
+              At R2R Doors, craftsmanship isn&apos;t just a claim — it&apos;s a
+              process. Every product goes through 12-point quality inspection
+              before leaving the factory. We don&apos;t ship doors. We ship
+              confidence.
+            </p>
+            <div className="mt-8 flex flex-col gap-5">
+              {whyChooseUs.map(({ icon: Icon, title, description }) => (
+                <div key={title} className="flex gap-4">
+                  <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-primary/10">
+                    <Icon className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">{title}</h3>
+                    <p className="mt-0.5 text-sm text-muted-foreground">
+                      {description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* Quote card */}
+          <Reveal direction="left">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-brand-deep p-8 text-white shadow-xl sm:p-10">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full opacity-40 blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, color-mix(in oklch, var(--brand-400) 70%, transparent), transparent 70%)",
+                }}
+              />
+              <div className="relative">
+                <h3 className="text-2xl font-bold">Get a Free Quote</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">
+                  Describe your project and our team will send you a detailed
+                  quotation within 24 hours — no obligation, no sales pressure.
+                </p>
+                <form
+                  action="mailto:info@r2rdoors.com"
+                  method="post"
+                  encType="text/plain"
+                  className="mt-6 flex flex-col gap-3"
+                >
+                  <label htmlFor="quote-name" className="sr-only">
+                    Your name
+                  </label>
+                  <input
+                    id="quote-name"
+                    name="name"
+                    type="text"
+                    placeholder="Your Name"
+                    className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 outline-none transition focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
+                  />
+                  <label htmlFor="quote-phone" className="sr-only">
+                    Phone number
+                  </label>
+                  <input
+                    id="quote-phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="Phone Number"
+                    className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 outline-none transition focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
+                  />
+                  <label htmlFor="quote-msg" className="sr-only">
+                    Describe your requirement
+                  </label>
+                  <textarea
+                    id="quote-msg"
+                    name="message"
+                    rows={3}
+                    placeholder="Describe your requirement..."
+                    className="resize-none rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 outline-none transition focus:border-white/40 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
+                  />
+                  <button
+                    type="submit"
+                    className="mt-1 rounded-xl bg-white px-6 py-3 font-semibold text-primary shadow-lg transition-transform hover:scale-[1.01] active:translate-y-px"
+                  >
+                    Request Free Quote
+                  </button>
+                </form>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── Why Choose Us ─────────────────────────────── */}
-      <section className="bg-background py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Engineered for Endurance
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-8">
-                At R2R Doors, craftsmanship isn&apos;t just a claim — it&apos;s a
-                process. Every product goes through 12-point quality inspection
-                before leaving the factory. We don&apos;t ship doors. We ship
-                confidence.
-              </p>
-              <div className="flex flex-col gap-5">
-                {whyChooseUs.map(({ icon: Icon, title, description }) => (
-                  <div key={title} className="flex gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">{title}</h3>
-                      <p className="text-sm text-muted-foreground">{description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-primary rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-2">Get a Free Quote</h3>
-              <p className="text-blue-200 text-sm mb-6 leading-relaxed">
-                Describe your project and our team will send you a detailed
-                quotation within 24 hours — no obligation, no sales pressure.
-              </p>
-              <div className="flex flex-col gap-3">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="px-4 py-3 rounded-xl bg-white/10 text-white placeholder:text-blue-200 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  className="px-4 py-3 rounded-xl bg-white/10 text-white placeholder:text-blue-200 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
-                />
-                <textarea
-                  rows={3}
-                  placeholder="Describe your requirement..."
-                  className="px-4 py-3 rounded-xl bg-white/10 text-white placeholder:text-blue-200 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 resize-none"
-                />
-                <button className="px-6 py-3 bg-white text-primary font-semibold rounded-xl hover:bg-blue-50 transition-colors">
-                  Request Free Quote
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── Closing CTA (cinematic bookend) ───────────── */}
+      <ClosingCta />
     </>
   );
 }

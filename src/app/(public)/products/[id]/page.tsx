@@ -3,8 +3,9 @@ export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Phone, Tag } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Phone, Tag, ChevronRight } from "lucide-react";
 import PriceCalculator from "./price-calculator";
+import { CategoryBadge, StockBadge } from "@/components/ui/status-badge";
 import { getProductById, getProducts } from "@/lib/services/products";
 
 const PLACEHOLDER = "https://placehold.co/800x600/165a9e/ffffff?text=No+Image";
@@ -23,136 +24,154 @@ export default async function ProductDetailPage({
     .catch(() => []);
 
   return (
-    <>
-      <section className="bg-background py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Back */}
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Products
+    <section className="bg-background py-10 sm:py-12">
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-8 flex items-center gap-1.5 text-sm text-muted-foreground"
+        >
+          <Link href="/products" className="transition-colors hover:text-foreground">
+            Products
           </Link>
+          <ChevronRight className="size-3.5" />
+          <span className="font-medium capitalize text-foreground">
+            {product.category}s
+          </span>
+          <ChevronRight className="size-3.5" />
+          <span className="truncate text-foreground/80">{product.name}</span>
+        </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Image */}
-            <div className="relative h-96 lg:h-[520px] rounded-2xl overflow-hidden bg-white ring-1 ring-border shadow-sm">
-              <Image
-                src={product.image || PLACEHOLDER}
-                alt={product.name}
-                fill
-                className="object-cover"
-                unoptimized
-              />
-              {!product.inStock && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="px-4 py-2 bg-white rounded-xl font-semibold text-foreground text-sm">
-                    Currently Out of Stock
-                  </span>
-                </div>
-              )}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
+          {/* Image */}
+          <div className="relative h-96 overflow-hidden rounded-3xl bg-card shadow-sm ring-1 ring-foreground/[0.07] lg:sticky lg:top-24 lg:h-[540px]">
+            <Image
+              src={product.image || PLACEHOLDER}
+              alt={product.name}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+              unoptimized
+            />
+            {!product.inStock && (
+              <div className="absolute inset-0 flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]">
+                <span className="rounded-xl bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-lg">
+                  Currently Out of Stock
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Details */}
+          <div className="flex flex-col gap-6">
+            <div>
+              <div className="mb-3 flex items-center gap-2">
+                <CategoryBadge category={product.category} />
+                <StockBadge inStock={product.inStock} />
+              </div>
+              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
+                {product.name}
+              </h1>
+              <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+                <Tag className="size-3.5" />
+                {product.material}
+              </p>
             </div>
 
-            {/* Details */}
-            <div className="flex flex-col gap-6">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold capitalize">
-                    {product.category}
-                  </span>
-                  {product.inStock ? (
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                      In Stock
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-600 text-xs font-semibold">
-                      Out of Stock
-                    </span>
-                  )}
-                </div>
-                <h1 className="text-3xl font-extrabold text-foreground leading-tight mb-2">
-                  {product.name}
-                </h1>
-                <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Tag className="w-3.5 h-3.5" />
-                  {product.material}
-                </p>
-              </div>
-
-              {/* Price */}
-              <div className="bg-white rounded-xl p-5 ring-1 ring-border shadow-sm">
-                <p className="text-sm text-muted-foreground mb-1">Base Price</p>
-                <p className="text-3xl font-extrabold text-primary">
-                  ₹{product.pricePerSqft.toLocaleString()}
-                  <span className="text-base font-medium text-muted-foreground ml-1">
-                    / sq.ft
-                  </span>
-                </p>
-              </div>
-
-              {/* Description */}
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                {product.description}
+            {/* Price */}
+            <div className="overflow-hidden rounded-2xl bg-gradient-brand-deep p-6 text-white shadow-md">
+              <p className="text-sm text-white/65">Base Price</p>
+              <p className="mt-1 text-4xl font-extrabold tracking-tight">
+                ₹{product.pricePerSqft.toLocaleString()}
+                <span className="ml-1.5 text-base font-medium text-white/60">
+                  / sq.ft
+                </span>
               </p>
+            </div>
 
-              {/* Features */}
+            {/* Description */}
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {product.description}
+            </p>
+
+            {/* Features */}
+            {product.features.length > 0 && (
               <div>
-                <h3 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-wide">
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-foreground">
                   Key Features
-                </h3>
-                <ul className="flex flex-col gap-2">
+                </h2>
+                <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                   {product.features.map((feat) => (
-                    <li key={feat} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                    <li
+                      key={feat}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
+                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
                       {feat}
                     </li>
                   ))}
                 </ul>
               </div>
+            )}
 
-              {/* Price Calculator */}
-              <PriceCalculator pricePerSqft={product.pricePerSqft} />
+            {/* Price Calculator */}
+            <PriceCalculator pricePerSqft={product.pricePerSqft} />
 
-              {/* CTA */}
-              <a
-                href="tel:+919876543210"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-white font-semibold rounded-xl shadow-md hover:bg-primary/90 hover:shadow-lg transition-all"
-              >
-                <Phone className="w-4 h-4" />
-                Enquire Now
-              </a>
-            </div>
-          </div>
+            {/* CTA */}
+            <a
+              href="tel:+919876543210"
+              className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-primary transition-[transform,box-shadow] hover:shadow-primary-lg active:translate-y-px"
+            >
+              <Phone className="size-4" />
+              Enquire Now
+            </a>
 
-          <div className="mt-20">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {related.map((p) => (
-                  <Link
-                    key={p.id}
-                    href={`/products/${p.id}`}
-                    className="group bg-white rounded-xl p-4 ring-1 ring-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex gap-4 items-center"
-                  >
-                    <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0">
-                      <Image src={p.image || PLACEHOLDER} alt={p.name} fill className="object-cover" unoptimized />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
-                        {p.name}
-                      </p>
-                      <p className="text-xs text-primary font-bold mt-0.5">
-                        ₹{p.pricePerSqft.toLocaleString()} / sq.ft
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-            </div>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" />
+              Back to all products
+            </Link>
           </div>
         </div>
-      </section>
-    </>
+
+        {related.length > 0 && (
+          <div className="mt-20">
+            <h2 className="mb-6 text-2xl font-bold tracking-tight text-foreground">
+              You May Also Like
+            </h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/products/${p.id}`}
+                  className="group flex items-center gap-4 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-muted">
+                    <Image
+                      src={p.image || PLACEHOLDER}
+                      alt={p.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+                      {p.name}
+                    </p>
+                    <p className="mt-0.5 text-xs font-bold text-primary">
+                      ₹{p.pricePerSqft.toLocaleString()} / sq.ft
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

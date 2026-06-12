@@ -35,46 +35,51 @@ const values = [
   },
 ];
 
+const heroStats = [
+  { value: "500+", label: "Projects Completed" },
+  { value: "15+", label: "Years of Experience" },
+  { value: "8", label: "Product Categories" },
+  { value: "10yr", label: "Structural Warranty" },
+];
+
 export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-white py-20 border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="relative overflow-hidden border-b border-border bg-hero-mesh">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
               Est. 2008 · Bengaluru, India
             </div>
-            <h1 className="text-4xl lg:text-5xl font-extrabold text-foreground leading-tight mb-6">
-              Built on Precision.<br />
-              <span className="text-primary">Grown on Trust.</span>
+            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground lg:text-5xl">
+              Built on Precision.
+              <br />
+              <span className="text-gradient">Grown on Trust.</span>
             </h1>
-            <p className="text-muted-foreground leading-relaxed text-lg mb-4">
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
               R2R Doors began as a small workshop with a single premise: every door
               deserves to be measured twice, cut once, and finished for a lifetime.
               Sixteen years and 500+ projects later, that philosophy still drives
               every decision we make.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="mt-4 leading-relaxed text-muted-foreground">
               From bespoke residential entrances to industrial-grade commercial
               partitions, we bring the same obsessive attention to detail — backed
-              by rigorous material selection, in-house manufacturing, and a team that
-              takes immense pride in what it builds.
+              by rigorous material selection, in-house manufacturing, and a team
+              that takes immense pride in what it builds.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            {[
-              { value: "500+", label: "Projects Completed" },
-              { value: "15+", label: "Years of Experience" },
-              { value: "8", label: "Product Categories" },
-              { value: "10yr", label: "Structural Warranty" },
-            ].map(({ value, label }) => (
+            {heroStats.map(({ value, label }) => (
               <div
                 key={label}
-                className="bg-background rounded-2xl p-6 ring-1 ring-border text-center"
+                className="rounded-2xl bg-card p-6 text-center shadow-sm ring-1 ring-foreground/[0.07]"
               >
-                <p className="text-3xl font-extrabold text-primary">{value}</p>
-                <p className="text-sm text-muted-foreground mt-1">{label}</p>
+                <p className="text-3xl font-extrabold tracking-tight text-gradient">
+                  {value}
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">{label}</p>
               </div>
             ))}
           </div>
@@ -83,24 +88,24 @@ export default function AboutPage() {
 
       {/* Mission & Vision */}
       <section className="bg-background py-20">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-primary rounded-2xl p-8 text-white">
-            <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center mb-5">
-              <Target className="w-5 h-5 text-white" />
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 md:grid-cols-2">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-brand-deep p-8 text-white shadow-md">
+            <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-white/15">
+              <Target className="size-5" />
             </div>
-            <h2 className="text-2xl font-bold mb-3">Our Mission</h2>
-            <p className="text-blue-100 leading-relaxed">
+            <h2 className="text-2xl font-bold">Our Mission</h2>
+            <p className="mt-3 leading-relaxed text-white/75">
               To deliver precision-engineered doors and windows that protect,
               beautify, and endure — at pricing that reflects the true value of
               quality workmanship, not inflated margins.
             </p>
           </div>
-          <div className="bg-white rounded-2xl p-8 ring-1 ring-border shadow-sm">
-            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
-              <Eye className="w-5 h-5 text-primary" />
+          <div className="rounded-3xl bg-card p-8 shadow-sm ring-1 ring-foreground/[0.07]">
+            <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-primary/10">
+              <Eye className="size-5" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-3">Our Vision</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <h2 className="text-2xl font-bold text-foreground">Our Vision</h2>
+            <p className="mt-3 leading-relaxed text-muted-foreground">
               To become India&apos;s most trusted name in custom door and window
               manufacturing — recognised for engineering integrity, sustainable
               materials, and a customer experience that turns first-time buyers
@@ -111,28 +116,31 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="bg-white py-20 border-y border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-3">
+      <section className="border-y border-border bg-card py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto mb-12 max-w-2xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+              Our Values
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               What We Stand For
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
+            <p className="mt-3 text-muted-foreground">
               Four principles that guide every product, every project, every day.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {values.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="flex gap-4 p-6 rounded-xl ring-1 ring-border bg-background hover:bg-white hover:shadow-md transition-all"
+                className="flex gap-4 rounded-2xl bg-background p-6 ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <Icon className="w-5 h-5 text-primary" />
+                <div className="mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-primary">
+                  <Icon className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">{title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <h3 className="font-semibold text-foreground">{title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                     {description}
                   </p>
                 </div>
@@ -144,30 +152,37 @@ export default function AboutPage() {
 
       {/* Timeline */}
       <section className="bg-background py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-3">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="mb-12 text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
+              Milestones
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Our Journey
             </h2>
-            <p className="text-muted-foreground">
+            <p className="mt-3 text-muted-foreground">
               Milestones that shaped R2R Doors.
             </p>
           </div>
           <div className="relative">
-            <div className="absolute left-[72px] top-0 bottom-0 w-0.5 bg-border md:left-1/2" />
+            <div className="absolute bottom-0 left-[28px] top-0 w-px bg-border md:left-1/2" />
             <div className="flex flex-col gap-8">
               {milestones.map((m, i) => (
                 <div
                   key={m.year}
-                  className={`flex gap-6 items-start md:w-1/2 ${
-                    i % 2 === 0 ? "md:ml-auto md:pl-8 md:pr-0" : "md:mr-auto md:pr-8 md:flex-row-reverse md:text-right"
+                  className={`flex items-start gap-6 md:w-1/2 ${
+                    i % 2 === 0
+                      ? "md:ml-auto md:pl-8"
+                      : "md:mr-auto md:flex-row-reverse md:pr-8 md:text-right"
                   }`}
                 >
-                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center shrink-0 shadow-sm">
-                    <span className="text-white text-xs font-bold">{m.year}</span>
+                  <div className="relative z-10 flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary shadow-primary">
+                    <span className="text-xs font-bold text-primary-foreground">
+                      {m.year}
+                    </span>
                   </div>
-                  <div className="bg-white rounded-xl p-4 ring-1 ring-border shadow-sm flex-1">
-                    <p className="text-sm text-foreground font-medium leading-relaxed">
+                  <div className="flex-1 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/[0.07]">
+                    <p className="text-sm font-medium leading-relaxed text-foreground">
                       {m.event}
                     </p>
                   </div>

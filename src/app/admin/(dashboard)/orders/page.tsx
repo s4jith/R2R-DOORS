@@ -1,16 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, ChevronDown } from "lucide-react";
+import { Search, ArrowRight, Inbox } from "lucide-react";
+import { OrderStatusBadge } from "@/components/ui/status-badge";
+import { cn } from "@/lib/utils";
 import type { Order } from "@/lib/types";
 
 const STATUS_OPTIONS = ["All", "Pending", "Confirmed", "Delivered"] as const;
-
-const statusStyles: Record<Order["status"], string> = {
-  pending: "bg-amber-100 text-amber-700 border border-amber-200",
-  confirmed: "bg-blue-100 text-blue-700 border border-blue-200",
-  delivered: "bg-green-100 text-green-700 border border-green-200",
-};
 
 const nextStatus: Record<Order["status"], Order["status"] | null> = {
   pending: "confirmed",
@@ -20,23 +16,27 @@ const nextStatus: Record<Order["status"], Order["status"] | null> = {
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [statusFilter, setStatusFilter] = useState<(typeof STATUS_OPTIONS)[number]>("All");
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] =
+    useState<(typeof STATUS_OPTIONS)[number]>("All");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetch("/api/orders")
       .then((r) => r.json())
       .then((data: Order[]) => setOrders(data))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = orders.filter((o) => {
     const matchStatus =
       statusFilter === "All" || o.status === statusFilter.toLowerCase();
+    const q = search.toLowerCase();
     const matchSearch =
-      o.customerName.toLowerCase().includes(search.toLowerCase()) ||
-      o.id.toLowerCase().includes(search.toLowerCase()) ||
-      o.product.toLowerCase().includes(search.toLowerCase());
+      o.customerName.toLowerCase().includes(q) ||
+      o.id.toLowerCase().includes(q) ||
+      o.product.toLowerCase().includes(q);
     return matchStatus && matchSearch;
   });
 
@@ -45,7 +45,6 @@ export default function AdminOrdersPage() {
     if (!order) return;
     const next = nextStatus[order.status];
     if (!next) return;
-    // optimistic update
     setOrders((prev) =>
       prev.map((o) => (o.id === id ? { ...o, status: next } : o))
     );
@@ -54,7 +53,6 @@ export default function AdminOrdersPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: next }),
     }).catch(() => {
-      // revert on failure
       setOrders((prev) =>
         prev.map((o) => (o.id === id ? { ...o, status: order.status } : o))
       );
@@ -65,42 +63,44 @@ export default function AdminOrdersPage() {
     <div className="p-6 lg:p-8">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl font-extrabold text-foreground">Orders</h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
+          Orders
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           {orders.length} total orders
         </p>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4 mb-6 p-4 bg-white rounded-xl ring-1 ring-border shadow-sm">
-        {/* Search */}
-        <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-card p-3 shadow-sm ring-1 ring-foreground/[0.07]">
+        <div className="relative min-w-48 flex-1">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, ID or product…"
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="w-full rounded-lg border border-border bg-background py-2 pl-9 pr-4 text-sm outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-ring/40"
           />
         </div>
 
-        {/* Status filter tabs */}
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-wrap gap-1 rounded-xl bg-muted p-1">
           {STATUS_OPTIONS.map((s) => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              aria-pressed={statusFilter === s}
+              className={cn(
+                "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                 statusFilter === s
-                  ? "bg-primary text-white shadow-sm"
-                  : "bg-muted text-muted-foreground hover:bg-secondary"
-              }`}
+                  ? "bg-card text-primary shadow-sm ring-1 ring-foreground/[0.06]"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
             >
               {s}
               {s !== "All" && (
-                <span className="ml-1.5 opacity-70">
-                  ({orders.filter((o) => o.status === s.toLowerCase()).length})
+                <span className="ml-1.5 opacity-60">
+                  {orders.filter((o) => o.status === s.toLowerCase()).length}
                 </span>
               )}
             </button>
@@ -109,17 +109,30 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-xl ring-1 ring-border shadow-sm overflow-hidden">
-        {filtered.length === 0 ? (
-          <div className="py-20 text-center text-muted-foreground">
-            <p className="font-medium">No orders found.</p>
-            <p className="text-sm mt-1">Adjust your search or filter.</p>
+      <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-foreground/[0.07]">
+        {loading ? (
+          <div className="space-y-px">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-4 px-5 py-4">
+                <div className="h-4 w-full animate-pulse rounded bg-muted" />
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center py-20 text-center">
+            <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-accent text-primary">
+              <Inbox className="size-6" />
+            </div>
+            <p className="font-semibold text-foreground">No orders found</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Adjust your search or filter to see results.
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border bg-muted/40">
+                <tr className="border-b border-border bg-muted/50">
                   {[
                     "Order ID",
                     "Customer",
@@ -132,7 +145,7 @@ export default function AdminOrdersPage() {
                   ].map((h) => (
                     <th
                       key={h}
-                      className="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap"
+                      className="whitespace-nowrap px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                     >
                       {h}
                     </th>
@@ -143,9 +156,9 @@ export default function AdminOrdersPage() {
                 {filtered.map((order) => (
                   <tr
                     key={order.id}
-                    className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors"
+                    className="border-b border-border transition-colors last:border-0 hover:bg-muted/40"
                   >
-                    <td className="px-5 py-4 font-medium text-foreground whitespace-nowrap">
+                    <td className="whitespace-nowrap px-5 py-4 font-medium text-foreground">
                       {order.id}
                     </td>
                     <td className="px-5 py-4">
@@ -156,23 +169,19 @@ export default function AdminOrdersPage() {
                         {order.phone}
                       </p>
                     </td>
-                    <td className="px-5 py-4 text-muted-foreground max-w-[180px]">
+                    <td className="max-w-[180px] px-5 py-4 text-muted-foreground">
                       <p className="truncate">{order.product}</p>
                     </td>
-                    <td className="px-5 py-4 text-muted-foreground whitespace-nowrap">
+                    <td className="whitespace-nowrap px-5 py-4 text-muted-foreground">
                       {order.width} × {order.height} ft
                     </td>
-                    <td className="px-5 py-4 font-semibold text-foreground whitespace-nowrap">
+                    <td className="whitespace-nowrap px-5 py-4 font-semibold text-foreground">
                       ₹{order.totalAmount.toLocaleString()}
                     </td>
                     <td className="px-5 py-4">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize ${statusStyles[order.status]}`}
-                      >
-                        {order.status}
-                      </span>
+                      <OrderStatusBadge status={order.status} />
                     </td>
-                    <td className="px-5 py-4 text-muted-foreground whitespace-nowrap">
+                    <td className="whitespace-nowrap px-5 py-4 text-muted-foreground">
                       {new Date(order.createdAt).toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "short",
@@ -183,10 +192,10 @@ export default function AdminOrdersPage() {
                       {nextStatus[order.status] ? (
                         <button
                           onClick={() => advanceStatus(order.id)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-semibold hover:bg-primary hover:text-white transition-colors whitespace-nowrap"
+                          className="inline-flex items-center gap-1 whitespace-nowrap rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
                         >
                           Mark {nextStatus[order.status]}
-                          <ChevronDown className="w-3 h-3 -rotate-90" />
+                          <ArrowRight className="size-3" />
                         </button>
                       ) : (
                         <span className="text-xs text-muted-foreground">
@@ -203,17 +212,15 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Summary footer */}
-      <div className="mt-4 flex items-center gap-6">
+      <div className="mt-4 flex flex-wrap items-center gap-4">
         {(["pending", "confirmed", "delivered"] as Order["status"][]).map((s) => {
           const count = orders.filter((o) => o.status === s).length;
           return (
             <div key={s} className="flex items-center gap-2">
-              <span
-                className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${statusStyles[s]}`}
-              >
-                {s}
+              <OrderStatusBadge status={s} withDot={false} />
+              <span className="text-xs font-medium text-muted-foreground">
+                {count}
               </span>
-              <span className="text-xs text-muted-foreground font-medium">{count}</span>
             </div>
           );
         })}
