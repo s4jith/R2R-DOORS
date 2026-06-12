@@ -13,6 +13,17 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Disable react rules that don't work with ESLint flat config
+  {
+    rules: {
+      "react/display-name": "off",
+      "react/prop-types": "off",
+      "react/no-direct-mutation-state": "off",
+      "react/no-render-return-value": "off",
+      "react/require-render-return": "off",
+      "react/no-string-refs": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

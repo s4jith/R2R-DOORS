@@ -45,7 +45,7 @@ if (password && hashToVerify) {
         : "\n✗ Password does NOT match the hash.\n"
     );
     process.exit(matches ? 0 : 1);
-  } catch (err) {
+  } catch {
     console.error("Error: invalid hash format.");
     process.exit(1);
   }

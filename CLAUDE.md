@@ -5,19 +5,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev            # dev server (Turbopack) on :3000
-npm run build          # production build (also runs tsc)
-npm run start          # serve the production build
-npm run lint           # ESLint (flat config, eslint-config-next)
-npm run typecheck      # tsc --noEmit
-npm run hash-password -- "plaintext"   # print ADMIN_PASSWORD_HASH (bcrypt)
+pnpm dev               # dev server (Turbopack) on :3000
+pnpm build             # production build (also runs tsc)
+pnpm start             # serve the production build
+pnpm lint              # ESLint (flat config, eslint-config-next)
+pnpm typecheck         # tsc --noEmit
+pnpm hash-password -- "plaintext"   # print ADMIN_PASSWORD_HASH (bcrypt)
 ```
 
 No test framework is configured. `next build` runs TypeScript but **not** ESLint — run `lint` and `typecheck` separately before considering a change done.
 
 ## Stack
 
-Next.js 16 (App Router, React 19, Turbopack) · TypeScript · Tailwind v4 + shadcn/ui · Mongoose/MongoDB · Cloudflare R2 (S3 API) · `jose` JWT + `bcryptjs` auth · `zod` validation. Package manager: npm.
+Next.js 16 (App Router, React 19, Turbopack) · TypeScript · Tailwind v4 + shadcn/ui · Mongoose/MongoDB · Cloudflare R2 (S3 API) · `jose` JWT + `bcryptjs` auth · `zod` validation. Package manager: pnpm.
 
 ## Architecture
 
