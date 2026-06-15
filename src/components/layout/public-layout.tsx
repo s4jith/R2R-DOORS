@@ -1,5 +1,7 @@
 import Navbar from "./navbar";
 import Footer from "./footer";
+import { WhatsAppFab } from "./whatsapp-fab";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function PublicLayout({
   children,
@@ -19,6 +21,8 @@ export default function PublicLayout({
         {children}
       </main>
       <Footer />
+      <WhatsAppFab />
+      <Toaster position="bottom-center" richColors />
     </div>
   );
 }

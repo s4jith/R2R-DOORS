@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { StageLayers } from "@/components/marketing/stage-layers";
 import { Reveal } from "@/components/motion/reveal";
+import { site } from "@/lib/site";
 
 /**
  * Dark closing-CTA bookend — reuses the hero's cinematic vocabulary (stage +
@@ -29,14 +30,14 @@ export function ClosingCta() {
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <Link
-              href="/products"
+              href="/contact"
               className="group inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-7 py-3.5 font-semibold text-primary-foreground shadow-primary-lg transition-transform active:translate-y-px"
             >
-              Explore Products
+              Get a Free Quote
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <a
-              href="tel:+919876543210"
+              href={site.phone.tel}
               className="border-gradient inline-flex items-center gap-2 rounded-xl px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/5"
             >
               Talk to an Expert

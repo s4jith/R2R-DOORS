@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { CheckCircle2, Target, Eye, Users, Award, Hammer } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "R2R Doors & Windows has engineered precision doors and windows since 2008 — 500+ projects, ISO 9001:2015 certified, backed by a 10-year structural warranty.",
+  alternates: { canonical: "/about" },
+};
 
 const milestones = [
   { year: "2008", event: "Founded in Bengaluru with a single manufacturing unit." },

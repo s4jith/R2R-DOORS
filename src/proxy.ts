@@ -33,10 +33,13 @@ export async function proxy(req: NextRequest) {
   // ── API: protect all mutations + privileged endpoints ──────────────────
   if (pathname.startsWith("/api/")) {
     const isAuthRoute = pathname.startsWith("/api/auth/");
+    // Public write endpoints (e.g. the contact form) are reachable logged-out.
+    const isPublicWrite = pathname === "/api/contact";
     const isPrivileged =
       pathname === "/api/upload" || pathname === "/api/seed";
     const needsAuth =
-      isPrivileged || (MUTATING_METHODS.has(req.method) && !isAuthRoute);
+      isPrivileged ||
+      (MUTATING_METHODS.has(req.method) && !isAuthRoute && !isPublicWrite);
 
     if (needsAuth && !session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

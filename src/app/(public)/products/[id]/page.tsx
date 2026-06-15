@@ -1,14 +1,39 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Phone, Tag, ChevronRight } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Phone, Tag } from "lucide-react";
 import PriceCalculator from "./price-calculator";
 import { CategoryBadge, StockBadge } from "@/components/ui/status-badge";
+import { Breadcrumbs } from "@/components/marketing/breadcrumbs";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getProductById, getProducts } from "@/lib/services/products";
+import { site } from "@/lib/site";
 
 const PLACEHOLDER = "https://placehold.co/800x600/165a9e/ffffff?text=No+Image";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProductById(id).catch(() => null);
+  if (!product) return { title: "Product not found" };
+  return {
+    title: product.name,
+    description: product.description.slice(0, 160),
+    alternates: { canonical: `/products/${product.id}` },
+    openGraph: {
+      title: `${product.name} | ${site.shortName}`,
+      description: product.description.slice(0, 200),
+      images: [product.image || PLACEHOLDER],
+      type: "website",
+    },
+  };
+}
 
 export default async function ProductDetailPage({
   params,
@@ -19,6 +44,26 @@ export default async function ProductDetailPage({
   const product = await getProductById(id).catch(() => null);
   if (!product) notFound();
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.image || PLACEHOLDER,
+    material: product.material,
+    brand: { "@type": "Brand", name: site.name },
+    category: product.category,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "INR",
+      price: product.pricePerSqft,
+      availability: product.inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      url: `${site.url}/products/${product.id}`,
+    },
+  };
+
   const related = await getProducts(product.category)
     .then((all) => all.filter((p) => p.id !== product.id).slice(0, 3))
     .catch(() => []);
@@ -26,21 +71,20 @@ export default async function ProductDetailPage({
   return (
     <section className="bg-background py-10 sm:py-12">
       <div className="mx-auto max-w-7xl px-6">
+        <JsonLd data={productJsonLd} />
         {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-8 flex items-center gap-1.5 text-sm text-muted-foreground"
-        >
-          <Link href="/products" className="transition-colors hover:text-foreground">
-            Products
-          </Link>
-          <ChevronRight className="size-3.5" />
-          <span className="font-medium capitalize text-foreground">
-            {product.category}s
-          </span>
-          <ChevronRight className="size-3.5" />
-          <span className="truncate text-foreground/80">{product.name}</span>
-        </nav>
+        <Breadcrumbs
+          className="mb-8"
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Products", href: "/products" },
+            {
+              label: `${product.category[0].toUpperCase()}${product.category.slice(1)}s`,
+              href: `/products?category=${product.category}`,
+            },
+            { label: product.name },
+          ]}
+        />
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
           {/* Image */}
@@ -118,13 +162,22 @@ export default async function ProductDetailPage({
             <PriceCalculator pricePerSqft={product.pricePerSqft} />
 
             {/* CTA */}
-            <a
-              href="tel:+919876543210"
-              className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-primary transition-[transform,box-shadow] hover:shadow-primary-lg active:translate-y-px"
-            >
-              <Phone className="size-4" />
-              Enquire Now
-            </a>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/contact"
+                className="group inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-primary transition-[transform,box-shadow] hover:shadow-primary-lg active:translate-y-px"
+              >
+                Get a Quote
+                <Phone className="size-4" />
+              </Link>
+              <a
+                href={site.phone.tel}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-foreground transition-colors hover:bg-muted"
+              >
+                <Phone className="size-4 text-primary" />
+                {site.phone.display}
+              </a>
+            </div>
 
             <Link
               href="/products"

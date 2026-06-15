@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { JsonLd } from "@/components/seo/json-ld";
+import { site } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -9,9 +11,64 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "R2R Doors & Windows - Precision Doors. Perfect Fit.",
-  description:
-    "Custom-built doors & windows crafted with premium materials, modern pricing, and fast delivery across India. R2R Doors & Windows is your trusted manufacturer for quality and endurance.",
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} — ${site.tagline}`,
+    template: `%s | ${site.shortName}`,
+  },
+  description: site.description,
+  applicationName: site.name,
+  keywords: [
+    "doors and windows",
+    "uPVC windows",
+    "aluminium doors",
+    "custom doors India",
+    "steel security doors",
+    "wooden doors Bengaluru",
+    "window manufacturer",
+    site.name,
+  ],
+  authors: [{ name: site.name }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: `${site.name} — ${site.tagline}`,
+    description: site.description,
+    url: site.url,
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} — ${site.tagline}`,
+    description: site.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+};
+
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  email: site.email,
+  telephone: site.phone.e164,
+  foundingDate: String(site.founded),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.address.line1,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  },
+  areaServed: "IN",
+  sameAs: site.socials.map((s) => s.href),
 };
 
 export default function RootLayout({
@@ -21,7 +78,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
-      <body className="font-sans antialiased min-h-screen">{children}</body>
+      <body className="font-sans antialiased min-h-screen">
+        {children}
+        <JsonLd data={localBusinessJsonLd} />
+      </body>
     </html>
   );
 }
