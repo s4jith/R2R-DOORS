@@ -16,7 +16,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CategoryBadge, StockBadge } from "@/components/ui/status-badge";
 import type { Product } from "@/lib/types";
 
-const PLACEHOLDER = "https://placehold.co/800x600/165a9e/ffffff?text=No+Image";
+const PLACEHOLDER = "https://placehold.co/800x600/1763c4/ffffff?text=No+Image";
+
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+];
+const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8 MB — mirrors the server limit
 
 const EMPTY_FORM: Omit<Product, "id" | "inStock" | "features"> = {
   name: "",
@@ -35,6 +43,7 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -44,7 +53,7 @@ export default function AdminProductsPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/products", { cache: "no-store" })
       .then((r) => r.json())
       .then((data: Product[]) => setProductList(data))
       .catch(() => {})
@@ -55,6 +64,7 @@ export default function AdminProductsPage() {
     setEditProduct(null);
     setForm(EMPTY_FORM);
     setSaveError(null);
+    setUploadError(null);
     setModalOpen(true);
   }
 
@@ -69,19 +79,34 @@ export default function AdminProductsPage() {
       material: product.material ?? "",
     });
     setSaveError(null);
+    setUploadError(null);
     setModalOpen(true);
   }
 
   async function handleImageUpload(file: File) {
+    setUploadError(null);
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setUploadError("Unsupported file type. Use JPEG, PNG, WebP or AVIF.");
+      return;
+    }
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setUploadError("Image exceeds the 8 MB size limit.");
+      return;
+    }
     setUploading(true);
     try {
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (data.url) setForm((f) => ({ ...f, image: data.url }));
-    } catch {
-      // ignore
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.url) {
+        throw new Error(data.error ?? `Upload failed (${res.status}).`);
+      }
+      setForm((f) => ({ ...f, image: data.url }));
+    } catch (err) {
+      setUploadError(
+        err instanceof Error ? err.message : "Upload failed. Please try again."
+      );
     } finally {
       setUploading(false);
     }
@@ -404,6 +429,7 @@ export default function AdminProductsPage() {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) handleImageUpload(file);
+                        e.target.value = ""; // allow re-selecting the same file
                       }}
                     />
                     <button
@@ -420,8 +446,17 @@ export default function AdminProductsPage() {
                       )}
                     </button>
                   </div>
+                  {uploadError && (
+                    <p className="mt-2 flex items-start gap-1.5 text-xs font-medium text-destructive">
+                      <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
+                      {uploadError}
+                    </p>
+                  )}
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    JPEG, PNG, WebP or AVIF · up to 8 MB · resized to 800×600.
+                  </p>
                   {form.image && (
-                    <div className="relative mt-2 h-24 w-36 overflow-hidden rounded-lg ring-1 ring-border">
+                    <div className="relative mt-2 h-24 w-36 overflow-hidden rounded-lg bg-muted ring-1 ring-border">
                       <Image
                         src={form.image}
                         alt="preview"

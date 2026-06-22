@@ -6,7 +6,6 @@ import { useState } from "react";
 import {
   LayoutDashboard,
   Package,
-  ClipboardList,
   LogOut,
   Menu,
   X,
@@ -21,7 +20,6 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/products", label: "Products", icon: Package },
-  { href: "/admin/orders", label: "Orders", icon: ClipboardList },
 ];
 
 function Sidebar({ onClose, mobile }: { onClose?: () => void; mobile?: boolean }) {

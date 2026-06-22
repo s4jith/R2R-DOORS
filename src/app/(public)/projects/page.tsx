@@ -33,16 +33,16 @@ export default function ProjectsPage() {
           <>
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-primary transition-transform active:translate-y-px"
+              className="group inline-flex items-center gap-2 rounded-[4px] bg-primary px-6 py-[13px] text-[15px] font-semibold text-primary-foreground transition-colors hover:bg-paper-dark-2"
             >
               Start your project
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <a
               href={site.phone.tel}
-              className="border-gradient inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold text-foreground transition-transform active:translate-y-px"
+              className="inline-flex items-center gap-2 rounded-[4px] border border-input px-6 py-[13px] text-[15px] font-semibold text-foreground transition-colors hover:border-foreground"
             >
-              <Phone className="size-4 text-primary" />
+              <Phone className="size-4 text-brass" />
               {site.phone.display}
             </a>
           </>
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
       />
 
       <section className="bg-background py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
           <ProjectsBrowser />
         </div>
       </section>

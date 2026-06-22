@@ -180,7 +180,7 @@ export default function AdminLoginPage() {
         </div>
         <div className="relative">
           <h2 className="max-w-md text-3xl font-bold leading-tight text-white">
-            Manage your catalogue, orders, and operations in one place.
+            Manage your catalogue and operations in one place.
           </h2>
           <p className="mt-4 max-w-sm text-white/65">
             The R2R control center — built for precision, just like our products.

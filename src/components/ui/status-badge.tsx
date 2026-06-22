@@ -1,48 +1,14 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Single source of truth for status/stock/category pill styling.
- * Uses semantic design tokens (success/warning/info) — never raw Tailwind
- * color literals — so order + product surfaces stay visually consistent and
- * dark-mode ready. Replaces the green/amber/blue maps previously duplicated
- * across the dashboard, orders, products, and product-detail screens.
+ * Single source of truth for stock/category pill styling.
+ * Uses semantic design tokens (success/destructive/accent) — never raw Tailwind
+ * color literals — so product surfaces stay visually consistent and dark-mode
+ * ready.
  */
 
 const base =
   "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ring-1 ring-inset";
-
-export type OrderStatus = "pending" | "confirmed" | "delivered";
-
-const orderStatusStyles: Record<OrderStatus, string> = {
-  pending: "bg-warning-subtle text-warning ring-warning/25",
-  confirmed: "bg-info-subtle text-info ring-info/25",
-  delivered: "bg-success-subtle text-success ring-success/25",
-};
-
-const dotStyles: Record<OrderStatus, string> = {
-  pending: "bg-warning",
-  confirmed: "bg-info",
-  delivered: "bg-success",
-};
-
-export function OrderStatusBadge({
-  status,
-  withDot = true,
-  className,
-}: {
-  status: OrderStatus;
-  withDot?: boolean;
-  className?: string;
-}) {
-  return (
-    <span className={cn(base, orderStatusStyles[status], className)}>
-      {withDot && (
-        <span className={cn("size-1.5 rounded-full", dotStyles[status])} />
-      )}
-      {status}
-    </span>
-  );
-}
 
 export function StockBadge({
   inStock,

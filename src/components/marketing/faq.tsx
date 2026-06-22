@@ -4,8 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { Reveal } from "@/components/motion/reveal";
 import { JsonLd } from "@/components/seo/json-ld";
 import { faqs as defaultFaqs, type Faq } from "@/lib/faq-data";
 import { cn } from "@/lib/utils";
@@ -37,34 +35,34 @@ export function Faqs({
   };
 
   return (
-    <section className={cn("bg-background py-20 sm:py-24", className)}>
-      <div className="mx-auto max-w-3xl px-6">
+    <section className={cn("bg-background py-[72px] sm:py-[100px]", className)}>
+      <div className="mx-auto max-w-[760px] px-5 sm:px-8">
         {heading && (
-          <SectionHeading
-            eyebrow="FAQ"
-            title="Questions, answered"
-            subtitle="Everything you need to know before you order. Still unsure? Talk to us."
-            className="mb-12"
-          />
+          <div className="mb-12">
+            <div className="mb-4 font-plex text-[11.5px] uppercase tracking-[0.16em] text-brass">
+              Answers
+            </div>
+            <h2 className="font-archivo text-[clamp(30px,4vw,42px)] font-bold leading-[1.04] tracking-[-0.02em]">
+              Questions, answered
+            </h2>
+          </div>
         )}
-        <Reveal>
-          <Accordion type="single" collapsible className="gap-1">
-            {items.map((f, i) => (
-              <AccordionItem
-                key={i}
-                value={`faq-${i}`}
-                className="rounded-2xl border border-border bg-card px-5 ring-1 ring-foreground/[0.04]"
-              >
-                <AccordionTrigger className="py-4 text-base font-semibold text-foreground hover:no-underline">
-                  {f.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-[0.95rem] leading-relaxed text-muted-foreground">
-                  {f.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </Reveal>
+        <Accordion type="single" collapsible className="border-t border-border">
+          {items.map((f, i) => (
+            <AccordionItem
+              key={i}
+              value={`faq-${i}`}
+              className="border-b border-border"
+            >
+              <AccordionTrigger className="py-6 font-archivo text-[18px] font-semibold tracking-[-0.01em] text-foreground hover:no-underline">
+                {f.question}
+              </AccordionTrigger>
+              <AccordionContent className="pb-[26px] text-[15.5px] leading-[1.65] text-ink-soft">
+                {f.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
       {withJsonLd && <JsonLd data={jsonLd} />}
     </section>

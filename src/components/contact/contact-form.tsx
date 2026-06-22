@@ -35,7 +35,10 @@ const initial: Fields = {
 };
 
 const inputClass =
-  "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground/70 focus:border-primary/40 focus:ring-2 focus:ring-ring/40 aria-[invalid=true]:border-destructive aria-[invalid=true]:ring-destructive/30";
+  "w-full rounded-[4px] border border-input bg-field-bg px-[14px] py-[13px] text-[15px] text-foreground outline-none transition-colors placeholder:text-ink-mono/70 focus:border-foreground aria-[invalid=true]:border-destructive";
+
+const labelClass =
+  "mb-2 block font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono";
 
 export default function ContactForm() {
   const [values, setValues] = useState<Fields>(initial);
@@ -103,7 +106,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="mb-1.5 block text-sm font-medium text-foreground"
+            className={labelClass}
           >
             Name <span className="text-destructive">*</span>
           </label>
@@ -128,7 +131,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="phone"
-            className="mb-1.5 block text-sm font-medium text-foreground"
+            className={labelClass}
           >
             Phone <span className="text-destructive">*</span>
           </label>
@@ -155,7 +158,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="email"
-            className="mb-1.5 block text-sm font-medium text-foreground"
+            className={labelClass}
           >
             Email
           </label>
@@ -180,7 +183,7 @@ export default function ContactForm() {
         <div>
           <label
             htmlFor="productInterest"
-            className="mb-1.5 block text-sm font-medium text-foreground"
+            className={labelClass}
           >
             I&apos;m interested in
           </label>
@@ -243,7 +246,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-primary transition-[transform,box-shadow] hover:shadow-primary-lg active:translate-y-px disabled:cursor-not-allowed disabled:opacity-70"
+        className="group inline-flex items-center justify-center gap-2 rounded-[4px] bg-primary px-6 py-4 text-[15.5px] font-semibold text-primary-foreground transition-colors hover:bg-paper-dark-2 disabled:cursor-not-allowed disabled:opacity-70"
       >
         {submitting ? (
           <>
@@ -257,7 +260,7 @@ export default function ContactForm() {
           </>
         )}
       </button>
-      <p className="text-xs text-muted-foreground">
+      <p className="font-plex text-[10.5px] tracking-[0.04em] text-ink-mono">
         We typically reply within 24 hours. Your details are never shared.
       </p>
     </form>

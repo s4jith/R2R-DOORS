@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-/** Public contact / quote-request form. Mirrors the orders validation style. */
+/** Public contact / quote-request form validation. */
 export const contactInput = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(120),
   phone: z.string().trim().min(6, "Please enter a valid phone number").max(20),

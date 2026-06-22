@@ -1,5 +1,4 @@
 import { Counter } from "@/components/motion/counter";
-import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
 export interface Stat {
@@ -15,9 +14,8 @@ const defaultStats: Stat[] = [
 ];
 
 /**
- * Metrics strip. Animated count-up via the shared Counter. Used on the home,
- * projects, and (optionally) about pages. Pass `variant="dark"` to drop it on a
- * deep brand band.
+ * Metrics strip — bordered blueprint cells. `variant="dark"` drops it on the
+ * espresso band (white type); the default sits on paper.
  */
 export function StatsBand({
   stats = defaultStats,
@@ -32,37 +30,39 @@ export function StatsBand({
   return (
     <section
       className={cn(
-        dark
-          ? "bg-gradient-brand-deep text-white"
-          : "border-y border-border bg-secondary/60",
+        dark ? "bg-paper-dark text-on-dark" : "border-y border-border bg-background",
         className
       )}
     >
-      <div className="mx-auto max-w-7xl px-6 py-14 sm:py-16">
-        <Reveal>
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <dd
-                  className={cn(
-                    "text-4xl font-extrabold tracking-tight sm:text-5xl",
-                    dark ? "text-white" : "text-gradient"
-                  )}
-                >
-                  <Counter value={s.value} />
-                </dd>
-                <dt
-                  className={cn(
-                    "mt-2 text-sm font-medium",
-                    dark ? "text-white/65" : "text-muted-foreground"
-                  )}
-                >
-                  {s.label}
-                </dt>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
+      <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+        <dl className="grid grid-cols-2 lg:grid-cols-4">
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className={cn(
+                "px-8 py-14",
+                dark ? "border-l border-white/10" : "border-l border-border"
+              )}
+            >
+              <dd
+                className={cn(
+                  "font-archivo text-[52px] font-bold leading-none tracking-[-0.02em]",
+                  dark ? "text-[#ffffff]" : "text-foreground"
+                )}
+              >
+                <Counter value={s.value} />
+              </dd>
+              <dt
+                className={cn(
+                  "mt-3.5 font-plex text-[11.5px] uppercase tracking-[0.1em]",
+                  dark ? "text-on-dark-dim" : "text-ink-mono"
+                )}
+              >
+                {s.label}
+              </dt>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );

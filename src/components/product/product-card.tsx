@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const PLACEHOLDER = "https://placehold.co/800x600/165a9e/ffffff?text=No+Image";
+const PLACEHOLDER = "https://placehold.co/800x600/0f2742/ffffff?text=R2R";
 
 interface ProductCardProps {
   product: Product;
@@ -18,54 +18,48 @@ export default function ProductCard({ product, className }: ProductCardProps) {
     <Link
       href={`/products/${product.id}`}
       className={cn(
-        "group block rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "group block overflow-hidden rounded-[6px] border border-border bg-card transition-colors hover:border-foreground",
         className
       )}
     >
-      <article className="relative h-full overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg">
-        {/* Image */}
-        <div className="relative h-52 overflow-hidden bg-muted">
-          <Image
-            src={product.image || PLACEHOLDER}
-            alt={product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-            unoptimized
-          />
-          {/* gradient scrim for badge legibility */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/25 to-transparent" />
-          <div className="absolute left-3 top-3 flex gap-2">
-            <span className="glass rounded-full px-2.5 py-1 text-xs font-semibold capitalize text-foreground shadow-sm ring-1 ring-white/40">
-              {product.category}
-            </span>
-            {!product.inStock && (
-              <span className="rounded-full bg-destructive/90 px-2.5 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
-                Out of Stock
-              </span>
-            )}
-          </div>
-        </div>
+      {/* Image */}
+      <div className="relative h-[210px] overflow-hidden border-b border-border bg-surface-illu">
+        <Image
+          src={product.image || PLACEHOLDER}
+          alt={product.name}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+          unoptimized
+        />
+        <span className="absolute left-3.5 top-3.5 rounded-[3px] border border-border bg-card px-[9px] py-1 font-plex text-[10px] uppercase tracking-[0.1em] text-ink-mono">
+          {product.category}
+        </span>
+        {!product.inStock && (
+          <span className="absolute right-3.5 top-3.5 rounded-[3px] bg-accent px-[9px] py-1 font-plex text-[10px] tracking-[0.08em] text-brass">
+            MADE TO ORDER
+          </span>
+        )}
+      </div>
 
-        {/* Content */}
-        <div className="p-5">
-          <h3 className="text-base font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">
-            {product.name}
-          </h3>
-          <p className="mt-1 text-xs text-muted-foreground">{product.material}</p>
-          <div className="mt-4 flex items-center justify-between">
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold tracking-tight text-foreground">
-                ₹{(Number.isFinite(safePrice) ? safePrice : 0).toLocaleString()}
-              </span>
-              <span className="text-xs text-muted-foreground">/ sq.ft</span>
-            </div>
-            <span className="flex size-9 items-center justify-center rounded-full bg-accent text-primary transition-colors group-hover:bg-gradient-primary group-hover:text-primary-foreground">
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+      {/* Content */}
+      <div className="p-[22px]">
+        <h3 className="font-archivo text-[18px] font-semibold tracking-[-0.01em] text-foreground">
+          {product.name}
+        </h3>
+        <p className="mt-1.5 text-[13.5px] text-ink-mono">{product.material}</p>
+        <div className="mt-[22px] flex items-end justify-between border-t border-border pt-[18px]">
+          <div>
+            <span className="font-archivo text-[22px] font-bold tracking-[-0.01em] text-foreground">
+              ₹{(Number.isFinite(safePrice) ? safePrice : 0).toLocaleString("en-IN")}
             </span>
+            <span className="ml-1 font-plex text-[11px] text-ink-mono">/ sq.ft</span>
           </div>
+          <span className="inline-flex size-[34px] items-center justify-center rounded-full border border-border text-foreground transition-colors group-hover:border-foreground">
+            <ArrowRight className="size-3.5" />
+          </span>
         </div>
-      </article>
+      </div>
     </Link>
   );
 }

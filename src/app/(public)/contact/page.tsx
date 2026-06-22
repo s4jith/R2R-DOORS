@@ -48,7 +48,7 @@ export default function ContactPage() {
       />
 
       <section className="bg-background py-16">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-[1fr_1.1fr]">
+        <div className="mx-auto grid max-w-[1240px] grid-cols-1 gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1.1fr]">
           {/* Left — details + map */}
           <div className="flex flex-col gap-4">
             {channels.map(({ icon: Icon, label, value, href, external }) => (
@@ -58,13 +58,13 @@ export default function ContactPage() {
                 {...(external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="group flex items-center gap-4 rounded-2xl bg-card p-5 shadow-sm ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md"
+                className="group flex items-center gap-4 rounded-[6px] border border-border bg-card p-5 transition-colors hover:border-foreground"
               >
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-primary/10 transition-colors group-hover:bg-gradient-primary group-hover:text-primary-foreground">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-[4px] bg-accent text-brass transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="size-5" />
                 </span>
                 <span>
-                  <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  <span className="block font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono">
                     {label}
                   </span>
                   <span className="mt-0.5 block font-semibold text-foreground">
@@ -75,13 +75,13 @@ export default function ContactPage() {
             ))}
 
             {/* Address + hours */}
-            <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-foreground/[0.07]">
+            <div className="rounded-[6px] border border-border bg-card p-5">
               <div className="flex items-start gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-primary/10">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-[4px] bg-accent text-brass">
                   <MapPin className="size-5" />
                 </span>
                 <div>
-                  <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  <span className="block font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono">
                     Visit us
                   </span>
                   <p className="mt-0.5 font-medium text-foreground">
@@ -90,20 +90,20 @@ export default function ContactPage() {
                 </div>
               </div>
               <div className="mt-5 flex items-start gap-4 border-t border-border pt-5">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-primary/10">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-[4px] bg-accent text-brass">
                   <Clock className="size-5" />
                 </span>
                 <div>
-                  <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  <span className="block font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono">
                     Hours
                   </span>
-                  <ul className="mt-1 flex flex-col gap-0.5">
+                  <ul className="mt-1.5 flex flex-col gap-1">
                     {site.hours.map((h) => (
                       <li
                         key={h.days}
-                        className="flex justify-between gap-6 text-sm text-foreground"
+                        className="flex justify-between gap-6 text-[14px] text-foreground"
                       >
-                        <span className="text-muted-foreground">{h.days}</span>
+                        <span className="text-ink-soft">{h.days}</span>
                         <span className="font-medium">{h.time}</span>
                       </li>
                     ))}
@@ -113,7 +113,7 @@ export default function ContactPage() {
             </div>
 
             {/* Map */}
-            <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-foreground/[0.07]">
+            <div className="overflow-hidden rounded-[6px] border border-border">
               <iframe
                 title={`Map to ${site.name}`}
                 src={mapSrc}
@@ -125,11 +125,11 @@ export default function ContactPage() {
           </div>
 
           {/* Right — form */}
-          <div className="rounded-3xl bg-card p-6 shadow-md ring-1 ring-foreground/[0.07] sm:p-8">
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <div className="rounded-[6px] border border-border bg-card p-6 sm:p-10">
+            <h2 className="font-archivo text-[24px] font-bold tracking-[-0.01em] text-foreground">
               Request a free quote
             </h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">
+            <p className="mt-1.5 text-[14px] text-ink-soft">
               Fields marked <span className="text-destructive">*</span> are
               required.
             </p>

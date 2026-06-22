@@ -50,44 +50,52 @@ const heroStats = [
   { value: "10yr", label: "Structural Warranty" },
 ];
 
+const eyebrow = "mb-4 font-plex text-[11.5px] uppercase tracking-[0.16em] text-brass";
+const h2 = "font-archivo text-[clamp(30px,4vw,42px)] font-bold leading-[1.04] tracking-[-0.02em]";
+const container = "mx-auto max-w-[1240px] px-5 sm:px-8";
+
 export default function AboutPage() {
   return (
-    <>
+    <div className="bg-background text-foreground">
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border bg-hero-mesh">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-20 lg:grid-cols-2">
+      <section className="relative overflow-hidden border-b border-border">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 w-1/2 bg-dotgrid [background-size:18px_18px] opacity-50 [mask-image:linear-gradient(to_left,black,transparent)]"
+        />
+        <div className={`${container} relative grid grid-cols-1 items-center gap-12 py-20 lg:grid-cols-2`}>
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
+            <div className="mb-6 inline-flex items-center gap-2 font-plex text-[11.5px] uppercase tracking-[0.16em] text-brass">
+              <span className="h-px w-6 bg-brass" />
               Est. 2008 · Bengaluru, India
             </div>
-            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-foreground lg:text-5xl">
-              Built on Precision.
+            <h1 className="font-archivo text-[clamp(38px,5vw,52px)] font-extrabold leading-[1.06] tracking-[-0.025em]">
+              Built on precision.
               <br />
-              <span className="text-gradient">Grown on Trust.</span>
+              Grown on trust.
             </h1>
-            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              R2R Doors began as a small workshop with a single premise: every door
-              deserves to be measured twice, cut once, and finished for a lifetime.
-              Sixteen years and 500+ projects later, that philosophy still drives
-              every decision we make.
+            <p className="mt-6 text-[18px] leading-[1.65] text-ink-soft">
+              R2R Doors began as a small workshop with a single premise: every
+              door deserves to be measured twice, cut once, and finished for a
+              lifetime. Sixteen years and 500+ projects later, that philosophy
+              still drives every decision we make.
             </p>
-            <p className="mt-4 leading-relaxed text-muted-foreground">
+            <p className="mt-4 leading-[1.65] text-ink-soft">
               From bespoke residential entrances to industrial-grade commercial
-              partitions, we bring the same obsessive attention to detail — backed
-              by rigorous material selection, in-house manufacturing, and a team
-              that takes immense pride in what it builds.
+              partitions, we bring the same obsessive attention to detail —
+              backed by rigorous material selection, in-house manufacturing, and
+              a team that takes immense pride in what it builds.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[6px] border border-border bg-border">
             {heroStats.map(({ value, label }) => (
-              <div
-                key={label}
-                className="rounded-2xl bg-card p-6 text-center shadow-sm ring-1 ring-foreground/[0.07]"
-              >
-                <p className="text-3xl font-extrabold tracking-tight text-gradient">
+              <div key={label} className="bg-card p-8 text-center">
+                <p className="font-archivo text-[36px] font-bold tracking-[-0.02em] text-foreground">
                   {value}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">{label}</p>
+                <p className="mt-1.5 font-plex text-[11px] uppercase tracking-[0.08em] text-ink-mono">
+                  {label}
+                </p>
               </div>
             ))}
           </div>
@@ -95,25 +103,29 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="bg-background py-20">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 md:grid-cols-2">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-brand-deep p-8 text-white shadow-md">
-            <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-white/15">
+      <section className="border-b border-border py-[72px] sm:py-[100px]">
+        <div className={`${container} grid grid-cols-1 gap-5 md:grid-cols-2`}>
+          <div className="rounded-[6px] bg-paper-dark p-9 text-on-dark">
+            <div className="mb-5 flex size-12 items-center justify-center rounded-[4px] bg-white/10 text-[#ffffff]">
               <Target className="size-5" />
             </div>
-            <h2 className="text-2xl font-bold">Our Mission</h2>
-            <p className="mt-3 leading-relaxed text-white/75">
+            <h2 className="font-archivo text-[24px] font-bold tracking-[-0.01em] text-[#ffffff]">
+              Our Mission
+            </h2>
+            <p className="mt-3 leading-[1.65] text-on-dark">
               To deliver precision-engineered doors and windows that protect,
               beautify, and endure — at pricing that reflects the true value of
               quality workmanship, not inflated margins.
             </p>
           </div>
-          <div className="rounded-3xl bg-card p-8 shadow-sm ring-1 ring-foreground/[0.07]">
-            <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-primary/10">
+          <div className="rounded-[6px] border border-border bg-card p-9">
+            <div className="mb-5 flex size-12 items-center justify-center rounded-[4px] bg-accent text-brass">
               <Eye className="size-5" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground">Our Vision</h2>
-            <p className="mt-3 leading-relaxed text-muted-foreground">
+            <h2 className="font-archivo text-[24px] font-bold tracking-[-0.01em] text-foreground">
+              Our Vision
+            </h2>
+            <p className="mt-3 leading-[1.65] text-ink-soft">
               To become India&apos;s most trusted name in custom door and window
               manufacturing — recognised for engineering integrity, sustainable
               materials, and a customer experience that turns first-time buyers
@@ -124,31 +136,29 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="border-y border-border bg-card py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
-              Our Values
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              What We Stand For
-            </h2>
-            <p className="mt-3 text-muted-foreground">
+      <section className="border-b border-border bg-surface-2 py-[72px] sm:py-[100px]">
+        <div className={container}>
+          <div className="mx-auto mb-14 max-w-[640px] text-center">
+            <div className={eyebrow}>Our Values</div>
+            <h2 className={h2}>What we stand for</h2>
+            <p className="mt-3 text-ink-soft">
               Four principles that guide every product, every project, every day.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {values.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="flex gap-4 rounded-2xl bg-background p-6 ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md"
+                className="flex gap-5 rounded-[6px] border border-border bg-background p-7"
               >
-                <div className="mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-primary">
+                <div className="mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-[4px] bg-primary text-primary-foreground">
                   <Icon className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">{title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  <h3 className="font-archivo text-[19px] font-semibold tracking-[-0.01em] text-foreground">
+                    {title}
+                  </h3>
+                  <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-soft">
                     {description}
                   </p>
                 </div>
@@ -159,18 +169,11 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline */}
-      <section className="bg-background py-20">
-        <div className="mx-auto max-w-4xl px-6">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
-              Milestones
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Our Journey
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              Milestones that shaped R2R Doors.
-            </p>
+      <section className="py-[72px] sm:py-[100px]">
+        <div className="mx-auto max-w-[820px] px-5 sm:px-8">
+          <div className="mb-14 text-center">
+            <div className={eyebrow}>Milestones</div>
+            <h2 className={h2}>Our journey</h2>
           </div>
           <div className="relative">
             <div className="absolute bottom-0 left-[28px] top-0 w-px bg-border md:left-1/2" />
@@ -184,13 +187,13 @@ export default function AboutPage() {
                       : "md:mr-auto md:flex-row-reverse md:pr-8 md:text-right"
                   }`}
                 >
-                  <div className="relative z-10 flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary shadow-primary">
-                    <span className="text-xs font-bold text-primary-foreground">
+                  <div className="relative z-10 flex size-14 shrink-0 items-center justify-center rounded-[4px] bg-primary">
+                    <span className="font-plex text-[12px] font-semibold text-primary-foreground">
                       {m.year}
                     </span>
                   </div>
-                  <div className="flex-1 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/[0.07]">
-                    <p className="text-sm font-medium leading-relaxed text-foreground">
+                  <div className="flex-1 rounded-[6px] border border-border bg-card p-4">
+                    <p className="text-[14.5px] font-medium leading-[1.55] text-foreground">
                       {m.event}
                     </p>
                   </div>
@@ -200,6 +203,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

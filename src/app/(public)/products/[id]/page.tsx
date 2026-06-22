@@ -12,7 +12,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { getProductById, getProducts } from "@/lib/services/products";
 import { site } from "@/lib/site";
 
-const PLACEHOLDER = "https://placehold.co/800x600/165a9e/ffffff?text=No+Image";
+const PLACEHOLDER = "https://placehold.co/800x600/0f2742/ffffff?text=R2R";
 
 export async function generateMetadata({
   params,
@@ -69,10 +69,9 @@ export default async function ProductDetailPage({
     .catch(() => []);
 
   return (
-    <section className="bg-background py-10 sm:py-12">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="bg-background py-12 text-foreground sm:py-14">
+      <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
         <JsonLd data={productJsonLd} />
-        {/* Breadcrumb */}
         <Breadcrumbs
           className="mb-8"
           items={[
@@ -88,7 +87,7 @@ export default async function ProductDetailPage({
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
           {/* Image */}
-          <div className="relative h-96 overflow-hidden rounded-3xl bg-card shadow-sm ring-1 ring-foreground/[0.07] lg:sticky lg:top-24 lg:h-[540px]">
+          <div className="relative h-96 overflow-hidden rounded-[6px] border border-border bg-surface-illu lg:sticky lg:top-[92px] lg:h-[540px]">
             <Image
               src={product.image || PLACEHOLDER}
               alt={product.name}
@@ -99,8 +98,8 @@ export default async function ProductDetailPage({
             />
             {!product.inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]">
-                <span className="rounded-xl bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-lg">
-                  Currently Out of Stock
+                <span className="rounded-[4px] bg-card px-4 py-2 text-[14px] font-semibold text-foreground shadow-lg">
+                  Currently Made to Order
                 </span>
               </div>
             )}
@@ -113,44 +112,46 @@ export default async function ProductDetailPage({
                 <CategoryBadge category={product.category} />
                 <StockBadge inStock={product.inStock} />
               </div>
-              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
+              <h1 className="font-archivo text-[clamp(28px,4vw,40px)] font-extrabold leading-[1.05] tracking-[-0.02em] text-foreground">
                 {product.name}
               </h1>
-              <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+              <p className="mt-2 flex items-center gap-1.5 font-plex text-[12px] tracking-[0.03em] text-ink-mono">
                 <Tag className="size-3.5" />
                 {product.material}
               </p>
             </div>
 
             {/* Price */}
-            <div className="overflow-hidden rounded-2xl bg-gradient-brand-deep p-6 text-white shadow-md">
-              <p className="text-sm text-white/65">Base Price</p>
-              <p className="mt-1 text-4xl font-extrabold tracking-tight">
-                ₹{product.pricePerSqft.toLocaleString()}
-                <span className="ml-1.5 text-base font-medium text-white/60">
+            <div className="overflow-hidden rounded-[6px] bg-paper-dark p-6 text-on-dark">
+              <p className="font-plex text-[11px] uppercase tracking-[0.1em] text-on-dark-dim">
+                Base price
+              </p>
+              <p className="mt-1 font-archivo text-[40px] font-extrabold tracking-[-0.02em] text-[#ffffff]">
+                ₹{product.pricePerSqft.toLocaleString("en-IN")}
+                <span className="ml-1.5 font-plex text-[15px] font-medium text-on-dark-dim">
                   / sq.ft
                 </span>
               </p>
             </div>
 
             {/* Description */}
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-[15px] leading-[1.65] text-ink-soft">
               {product.description}
             </p>
 
             {/* Features */}
             {product.features.length > 0 && (
               <div>
-                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-foreground">
-                  Key Features
+                <h2 className="mb-3 font-plex text-[11px] uppercase tracking-[0.1em] text-ink-mono">
+                  Key features
                 </h2>
                 <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                   {product.features.map((feat) => (
                     <li
                       key={feat}
-                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                      className="flex items-start gap-2 text-[14.5px] text-ink-soft"
                     >
-                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-brass" />
                       {feat}
                     </li>
                   ))}
@@ -165,23 +166,23 @@ export default async function ProductDetailPage({
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/contact"
-                className="group inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-primary transition-[transform,box-shadow] hover:shadow-primary-lg active:translate-y-px"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-[4px] bg-primary px-6 py-4 text-[15.5px] font-semibold text-primary-foreground transition-colors hover:bg-paper-dark-2"
               >
-                Get a Quote
+                Get a quote
                 <Phone className="size-4" />
               </Link>
               <a
                 href={site.phone.tel}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-6 py-3.5 font-semibold text-foreground transition-colors hover:bg-muted"
+                className="inline-flex items-center justify-center gap-2 rounded-[4px] border border-input px-6 py-4 text-[15.5px] font-semibold text-foreground transition-colors hover:border-foreground"
               >
-                <Phone className="size-4 text-primary" />
+                <Phone className="size-4 text-brass" />
                 {site.phone.display}
               </a>
             </div>
 
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-2 text-[14px] text-ink-soft transition-colors hover:text-foreground"
             >
               <ArrowLeft className="size-4" />
               Back to all products
@@ -191,17 +192,17 @@ export default async function ProductDetailPage({
 
         {related.length > 0 && (
           <div className="mt-20">
-            <h2 className="mb-6 text-2xl font-bold tracking-tight text-foreground">
-              You May Also Like
+            <h2 className="mb-6 font-archivo text-[24px] font-bold tracking-[-0.01em] text-foreground">
+              You may also like
             </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((p) => (
                 <Link
                   key={p.id}
                   href={`/products/${p.id}`}
-                  className="group flex items-center gap-4 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md"
+                  className="group flex items-center gap-4 rounded-[6px] border border-border bg-card p-4 transition-colors hover:border-foreground"
                 >
-                  <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-muted">
+                  <div className="relative size-16 shrink-0 overflow-hidden rounded-[4px] bg-surface-illu">
                     <Image
                       src={p.image || PLACEHOLDER}
                       alt={p.name}
@@ -212,11 +213,11 @@ export default async function ProductDetailPage({
                     />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+                    <p className="truncate font-archivo text-[15px] font-semibold text-foreground">
                       {p.name}
                     </p>
-                    <p className="mt-0.5 text-xs font-bold text-primary">
-                      ₹{p.pricePerSqft.toLocaleString()} / sq.ft
+                    <p className="mt-0.5 font-plex text-[12px] font-medium text-brass">
+                      ₹{p.pricePerSqft.toLocaleString("en-IN")} / sq.ft
                     </p>
                   </div>
                 </Link>

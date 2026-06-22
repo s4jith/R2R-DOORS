@@ -14,6 +14,10 @@ import {
   unauthorized,
 } from "@/lib/api/http";
 
+// Catalogue is admin-managed and must always reflect the latest data — never
+// serve a statically cached response.
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const raw = new URL(req.url).searchParams.get("category");
   const category = raw === "door" || raw === "window" ? raw : undefined;

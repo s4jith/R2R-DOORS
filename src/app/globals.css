@@ -58,6 +58,22 @@
   --color-brand-900: var(--brand-900);
   --color-brand-950: var(--brand-950);
 
+  /* --- R2R public brand colors (resolve under .theme-paper scope) --------- */
+  --color-brass: var(--brass);
+  --color-brass-light: var(--brass-light);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mono: var(--ink-mono);
+  --color-on-dark: var(--on-dark);
+  --color-on-dark-dim: var(--on-dark-dim);
+  --color-on-dark-faint: var(--on-dark-faint);
+  --color-paper-dark: var(--paper-dark);
+  --color-paper-dark-2: var(--paper-dark-2);
+  --color-surface-2: var(--surface-2);
+  --color-surface-illu: var(--surface-illu);
+  --color-hairline: var(--hairline);
+  --color-hairline-soft: var(--hairline-soft);
+  --color-field-bg: var(--field-bg);
+
   /* --- charts ------------------------------------------------------------- */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -253,6 +269,75 @@
   --gradient-primary: linear-gradient(135deg, oklch(0.660 0.170 256), oklch(0.560 0.165 266));
   --gradient-brand-deep: linear-gradient(150deg, oklch(0.260 0.060 258) 0%, oklch(0.190 0.040 260) 100%);
   --door-stage: oklch(0.58 0.14 250);
+}
+
+/* ============================================================================
+   R2R PUBLIC SITE — blue/white brand theme
+   Scoped to the public marketing site via .theme-paper. Shares the cobalt-blue
+   visual language with the admin dashboard. The legacy role names (brass,
+   ink-*, paper-dark, on-dark, …) are retained as semantic indirection — they
+   now resolve to blue/white values, so every consumer updates from one place.
+   Edit brand hexes here only; never hardcode them in components.
+   ========================================================================== */
+.theme-paper {
+  --background: #f5f8fc;        /* cool off-white */
+  --foreground: #0f2742;        /* deep navy ink */
+
+  --card: #ffffff;
+  --card-foreground: #0f2742;
+  --popover: #ffffff;
+  --popover-foreground: #0f2742;
+
+  /* primary = cobalt/azure blue — CTAs are blue */
+  --primary: #1763c4;
+  --primary-foreground: #ffffff;
+
+  --secondary: #eaf1fb;
+  --secondary-foreground: #1b3a63;
+
+  --muted: #eef3fa;
+  --muted-foreground: #5b708c;
+
+  --accent: #e2edfc;            /* blue-tint surface */
+  --accent-foreground: #1763c4;
+
+  --destructive: #d0432a;
+  --destructive-foreground: #ffffff;
+
+  --border: #dbe6f3;
+  --input: #c9d8ec;
+  --ring: #1763c4;
+
+  /* brand-specific roles (legacy names; now blue/white) */
+  --brass: #1763c4;             /* accent highlight (was brass gold) */
+  --brass-light: #6aa6e8;       /* light accent on dark surfaces */
+  --ink-soft: #475a73;          /* body copy on light */
+  --ink-mono: #7088a4;          /* mono captions */
+  --paper-dark: #0e2747;        /* dark sections (utility bar, footer) = navy */
+  --paper-dark-2: #15396a;      /* hover on dark */
+  --on-dark: #c5d8ef;
+  --on-dark-dim: #8ea7c7;
+  --on-dark-faint: #6e87a8;
+  --surface-2: #eaf1fb;
+  --surface-illu: #eef4fc;      /* illustration plate */
+  --hairline: #dbe6f3;
+  --hairline-soft: #e6eef9;
+  --grid-dot: #d2e0f1;          /* dotted illustration grid */
+  --field-bg: #f8fbfe;
+
+  --font-sans: var(--font-hanken);
+  --radius: 0.375rem;
+
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-hanken), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.theme-paper ::selection {
+  background: #cfe0f7;
+  color: #0f2742;
 }
 
 /* ============================================================================
@@ -465,6 +550,21 @@
 @utility mask-fade-x {
   -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* ── R2R public-site type families ──────────────────────────────────────── */
+@utility font-archivo {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+}
+@utility font-plex {
+  font-family: var(--font-plex), ui-monospace, monospace;
+}
+
+/* dotted blueprint plate behind product / project illustrations.
+   Override the cell size per use with e.g. [background-size:18px_18px]. */
+@utility bg-dotgrid {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
 /* infinite marquee track (duplicate children, animate -50%) */

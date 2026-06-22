@@ -9,17 +9,3 @@ export interface Product {
   features: string[];
   inStock: boolean;
 }
-
-export interface Order {
-  id: string;
-  customerName: string;
-  phone: string;
-  email: string;
-  product: string;
-  productId: string;
-  width: number;
-  height: number;
-  totalAmount: number;
-  status: "pending" | "confirmed" | "delivered";
-  createdAt: string;
-}

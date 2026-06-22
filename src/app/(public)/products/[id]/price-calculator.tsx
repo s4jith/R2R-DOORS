@@ -15,19 +15,19 @@ export default function PriceCalculator({ pricePerSqft }: PriceCalculatorProps) 
   const calcPrice = calcArea > 0 ? calcArea * pricePerSqft : null;
 
   const inputCls =
-    "w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-ring/40";
+    "w-full rounded-[4px] border border-input bg-field-bg px-[14px] py-[11px] text-[15px] text-foreground outline-none transition-colors focus:border-foreground";
 
   return (
-    <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-foreground/[0.07]">
-      <h3 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-foreground">
-        <Calculator className="size-4 text-primary" />
+    <div className="rounded-[6px] border border-border bg-card p-6">
+      <h3 className="mb-4 flex items-center gap-2 font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono">
+        <Calculator className="size-4 text-brass" />
         Price Calculator
       </h3>
       <div className="mb-4 grid grid-cols-2 gap-3">
         <div>
           <label
             htmlFor="calc-width"
-            className="mb-1 block text-xs text-muted-foreground"
+            className="mb-1.5 block font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono"
           >
             Width (ft)
           </label>
@@ -45,7 +45,7 @@ export default function PriceCalculator({ pricePerSqft }: PriceCalculatorProps) 
         <div>
           <label
             htmlFor="calc-height"
-            className="mb-1 block text-xs text-muted-foreground"
+            className="mb-1.5 block font-plex text-[10.5px] uppercase tracking-[0.1em] text-ink-mono"
           >
             Height (ft)
           </label>
@@ -62,19 +62,19 @@ export default function PriceCalculator({ pricePerSqft }: PriceCalculatorProps) 
         </div>
       </div>
       {calcPrice !== null ? (
-        <div className="rounded-xl bg-accent p-4 ring-1 ring-primary/10">
-          <p className="text-xs text-muted-foreground">
+        <div className="rounded-[4px] border border-border bg-accent p-4">
+          <p className="font-plex text-[11px] text-ink-mono">
             {width} ft × {height} ft = {calcArea} sq.ft
           </p>
-          <p className="mt-0.5 text-2xl font-bold tracking-tight text-primary">
-            ₹{calcPrice.toLocaleString()}
+          <p className="mt-1 font-archivo text-[26px] font-bold tracking-[-0.01em] text-foreground">
+            ₹{calcPrice.toLocaleString("en-IN")}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-[12px] text-ink-soft">
             * Estimate only. Final price may vary with finish and hardware.
           </p>
         </div>
       ) : (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-[13px] text-ink-soft">
           Enter width and height to calculate an estimated price.
         </p>
       )}

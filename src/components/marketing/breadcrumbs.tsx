@@ -35,7 +35,7 @@ export function Breadcrumbs({
     <nav
       aria-label="Breadcrumb"
       className={cn(
-        "flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground",
+        "flex flex-wrap items-center gap-1.5 font-plex text-[11px] uppercase tracking-[0.08em] text-ink-mono",
         className
       )}
     >

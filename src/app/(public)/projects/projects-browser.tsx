@@ -23,38 +23,36 @@ export default function ProjectsBrowser() {
   return (
     <>
       {/* Filter bar */}
-      <div className="mb-8 flex flex-wrap items-center gap-3 rounded-2xl bg-card p-3 shadow-sm ring-1 ring-foreground/[0.07]">
-        <div className="flex items-center gap-2 pl-2 text-sm font-medium text-muted-foreground">
+      <div className="mb-8 flex flex-wrap items-center gap-3 rounded-[6px] border border-border bg-card p-3">
+        <div className="flex items-center gap-2 pl-2 font-plex text-[11px] uppercase tracking-[0.08em] text-ink-mono">
           <SlidersHorizontal className="size-4" />
           <span className="hidden sm:inline">Filter</span>
         </div>
-        <div className="flex flex-wrap gap-1 rounded-xl bg-muted p-1">
+        <div className="flex flex-wrap gap-1.5 rounded-[6px] bg-secondary p-1.5">
           {projectCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
               aria-pressed={category === cat}
               className={cn(
-                "rounded-lg px-4 py-1.5 text-sm font-medium transition-all outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                "rounded-[4px] px-4 py-[7px] text-[14px] font-semibold transition-colors outline-none",
                 category === cat
-                  ? "bg-card text-primary shadow-sm ring-1 ring-foreground/[0.06]"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-ink-soft hover:text-foreground"
               )}
             >
               {cat}
             </button>
           ))}
         </div>
-        <p className="ml-auto pr-2 text-sm text-muted-foreground">
-          <span className="font-semibold text-foreground">
-            {filtered.length}
-          </span>{" "}
+        <p className="ml-auto pr-2 font-plex text-[12px] tracking-[0.04em] text-ink-mono">
+          <span className="font-semibold text-foreground">{filtered.length}</span>{" "}
           project{filtered.length !== 1 ? "s" : ""}
         </p>
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((p) => (
           <ProjectCard key={p.id} project={p} className="h-full" />
         ))}

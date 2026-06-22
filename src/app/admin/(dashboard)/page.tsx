@@ -1,29 +1,31 @@
 import {
   Package,
-  ClipboardList,
-  TrendingUp,
-  Clock,
+  DoorOpen,
+  PanelTop,
+  CheckCircle2,
   ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { getProducts } from "@/lib/services/products";
-import { getOrders } from "@/lib/services/orders";
-import { OrderStatusBadge } from "@/components/ui/status-badge";
+import { StockBadge, CategoryBadge } from "@/components/ui/status-badge";
 import { cn } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
+
+const PLACEHOLDER = "https://placehold.co/800x600/1763c4/ffffff?text=R2R";
 
 function StatCard({
   label,
   value,
   icon: Icon,
   sub,
-  trend,
   tint,
 }: {
   label: string;
   value: string;
   icon: React.ElementType;
   sub?: string;
-  trend?: string;
   tint: string;
 }) {
   return (
@@ -37,12 +39,6 @@ function StatCard({
         >
           <Icon className="size-5" />
         </div>
-        {trend && (
-          <span className="inline-flex items-center gap-0.5 rounded-full bg-success-subtle px-2 py-0.5 text-xs font-semibold text-success ring-1 ring-success/20">
-            <ArrowUpRight className="size-3.5" />
-            {trend}
-          </span>
-        )}
       </div>
       <p className="mt-4 text-3xl font-extrabold tracking-tight text-foreground">
         {value}
@@ -54,12 +50,11 @@ function StatCard({
 }
 
 export default async function AdminDashboardPage() {
-  const [products, orders] = await Promise.all([
-    getProducts().catch(() => []),
-    getOrders().catch(() => []),
-  ]);
-  const totalRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);
-  const pendingOrders = orders.filter((o) => o.status === "pending").length;
+  const products = await getProducts().catch(() => []);
+
+  const doors = products.filter((p) => p.category === "door").length;
+  const windows = products.filter((p) => p.category === "window").length;
+  const inStock = products.filter((p) => p.inStock).length;
 
   const stats = [
     {
@@ -67,30 +62,27 @@ export default async function AdminDashboardPage() {
       value: String(products.length),
       icon: Package,
       sub: "Across all categories",
-      trend: "+2 this month",
       tint: "bg-accent text-primary",
     },
     {
-      label: "Total Orders",
-      value: String(orders.length),
-      icon: ClipboardList,
-      sub: "All time",
-      trend: "+3 this week",
-      tint: "bg-info-subtle text-info",
-    },
-    {
-      label: "Revenue",
-      value: `₹${(totalRevenue / 100000).toFixed(1)}L`,
-      icon: TrendingUp,
-      sub: "Total all-time",
-      trend: "+12%",
+      label: "In Stock",
+      value: String(inStock),
+      icon: CheckCircle2,
+      sub: `${products.length - inStock} made to order`,
       tint: "bg-success-subtle text-success",
     },
     {
-      label: "Pending Orders",
-      value: String(pendingOrders),
-      icon: Clock,
-      sub: "Awaiting confirmation",
+      label: "Doors",
+      value: String(doors),
+      icon: DoorOpen,
+      sub: "Door catalogue",
+      tint: "bg-info-subtle text-info",
+    },
+    {
+      label: "Windows",
+      value: String(windows),
+      icon: PanelTop,
+      sub: "Window catalogue",
       tint: "bg-warning-subtle text-warning",
     },
   ];
@@ -103,7 +95,7 @@ export default async function AdminDashboardPage() {
           Welcome back, Admin
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Here&apos;s a snapshot of your business today.
+          Here&apos;s a snapshot of your catalogue today.
         </p>
       </div>
 
@@ -114,23 +106,23 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Recent Orders */}
+      {/* Recent Products */}
       <div className="overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-foreground/[0.07]">
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
-          <h3 className="font-semibold text-foreground">Recent Orders</h3>
+          <h3 className="font-semibold text-foreground">Recent Products</h3>
           <Link
-            href="/admin/orders"
+            href="/admin/products"
             className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-colors hover:text-primary/80"
           >
             View all
             <ArrowUpRight className="size-3.5" />
           </Link>
         </div>
-        {orders.length === 0 ? (
+        {products.length === 0 ? (
           <div className="px-6 py-16 text-center">
-            <p className="font-medium text-foreground">No orders yet</p>
+            <p className="font-medium text-foreground">No products yet</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              New orders will appear here as they come in.
+              Add products from the Products page to populate your catalogue.
             </p>
           </div>
         ) : (
@@ -138,38 +130,47 @@ export default async function AdminDashboardPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/50">
-                  {["Order ID", "Customer", "Product", "Amount", "Status"].map(
-                    (h) => (
-                      <th
-                        key={h}
-                        className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                      >
-                        {h}
-                      </th>
-                    )
-                  )}
+                  {["Product", "Category", "Price / sq.ft", "Stock"].map((h) => (
+                    <th
+                      key={h}
+                      className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {orders.slice(0, 5).map((order) => (
+                {products.slice(0, 5).map((product) => (
                   <tr
-                    key={order.id}
+                    key={product.id}
                     className="border-b border-border transition-colors last:border-0 hover:bg-muted/40"
                   >
-                    <td className="px-6 py-3.5 font-medium text-foreground">
-                      {order.id}
-                    </td>
-                    <td className="px-6 py-3.5 text-muted-foreground">
-                      {order.customerName}
-                    </td>
-                    <td className="px-6 py-3.5 text-muted-foreground">
-                      {order.product}
-                    </td>
-                    <td className="px-6 py-3.5 font-semibold text-foreground">
-                      ₹{order.totalAmount.toLocaleString()}
+                    <td className="px-6 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="relative size-9 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/[0.06]">
+                          <Image
+                            src={product.image || PLACEHOLDER}
+                            alt={product.name}
+                            fill
+                            sizes="36px"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        </div>
+                        <span className="font-medium text-foreground">
+                          {product.name}
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-3.5">
-                      <OrderStatusBadge status={order.status} />
+                      <CategoryBadge category={product.category} />
+                    </td>
+                    <td className="px-6 py-3.5 font-semibold text-foreground">
+                      ₹{(product.pricePerSqft ?? 0).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-3.5">
+                      <StockBadge inStock={product.inStock} />
                     </td>
                   </tr>
                 ))}
@@ -199,16 +200,18 @@ export default async function AdminDashboardPage() {
           <ArrowUpRight className="ml-auto size-4 text-muted-foreground transition-colors group-hover:text-primary" />
         </Link>
         <Link
-          href="/admin/orders"
+          href="/"
           className="group flex items-center gap-4 rounded-2xl bg-card p-5 shadow-sm ring-1 ring-foreground/[0.07] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md"
         >
           <div className="flex size-11 items-center justify-center rounded-xl bg-info-subtle text-info transition-colors group-hover:bg-info group-hover:text-info-foreground">
-            <ClipboardList className="size-5" />
+            <DoorOpen className="size-5" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-foreground">Manage Orders</p>
+            <p className="text-sm font-semibold text-foreground">
+              View Public Site
+            </p>
             <p className="text-xs text-muted-foreground">
-              Track and update order statuses
+              See your catalogue as customers do
             </p>
           </div>
           <ArrowUpRight className="ml-auto size-4 text-muted-foreground transition-colors group-hover:text-info" />
